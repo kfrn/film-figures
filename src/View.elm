@@ -36,9 +36,33 @@ navbar language system =
                     [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
                     ]
                 ]
-            , div [ class "navbar-end" ] [ languageControls language ]
+            , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
             ]
         ]
+
+
+systemControls : Language -> SystemOfMeasurement -> Html Msg
+systemControls lang system =
+    let
+        nameStr s =
+            case s of
+                Metric ->
+                    MetricStr
+
+                Imperial ->
+                    ImperialStr
+
+        makeButton sys =
+            button
+                [ classList
+                    [ ( "button is-small", True )
+                    , ( "is-primary", sys == system )
+                    ]
+                , onClick (ChangeSystemOfMeasurement sys)
+                ]
+                [ text <| translate lang <| nameStr sys ]
+    in
+    div [ class "navbar-item" ] (List.map makeButton allSystemsOfMeasurement)
 
 
 languageControls : Language -> Html Msg
@@ -50,9 +74,9 @@ languageControls language =
                     [ ( "button is-small", True )
                     , ( "is-primary", l == language )
                     ]
-                , onClick (ChangeLanguage l)
+                , onClick <| ChangeLanguage l
                 ]
-                [ text (toString l) ]
+                [ text <| toString l ]
     in
     div [ class "navbar-item" ] (List.map makeButton allLanguages)
 

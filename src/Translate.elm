@@ -14,6 +14,8 @@ allLanguages =
 
 type AppString
     = DevelopedByStr
+    | ImperialStr
+    | MetricStr
     | TaglineStr
 
 
@@ -26,6 +28,18 @@ translate language appString =
                     { en = "Web app by Katherine Frances Nagels"
                     , fr = "Application web par Katherine Frances Nagels"
                     , it = "Applicazione web di Katherine Frances Nagels"
+                    }
+
+                ImperialStr ->
+                    { en = "imperial"
+                    , fr = "impérial"
+                    , it = "imperiale"
+                    }
+
+                MetricStr ->
+                    { en = "metric"
+                    , fr = "métrique"
+                    , it = "metrico"
                     }
 
                 TaglineStr ->
