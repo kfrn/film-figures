@@ -3,6 +3,7 @@ module View exposing (view)
 import Html exposing (Html, button, div, em, h1, i, nav, p, span, text)
 import Html.Attributes exposing (attribute, class, classList, id)
 import Html.Events exposing (onClick)
+import Links exposing (LinkName(..), link)
 import Model exposing (Model)
 import Translate exposing (AppString(..), Language(..), allLanguages, translate)
 import Types exposing (..)
@@ -59,6 +60,6 @@ languageControls language =
 footer : Language -> Html Msg
 footer language =
     div [ class "level app-footer" ]
-        [ div [ class "level-left" ] [ text <| translate language DevelopedByStr ]
-        , div [ class "is-size-6" ] [ text "links here" ]
+        [ div [ class "level-left left-offset" ] [ text <| translate language DevelopedByStr ]
+        , div [ class "is-size-6 right-offset" ] [ link Email, link SourceCode ]
         ]
