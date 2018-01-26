@@ -1,15 +1,36 @@
+/*------- MAIN -------*/
+
 body {
-  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+  font-family: "Comfortaa", "Helvetica Neue", sans-serif;
+}
+
+#container {
+  border: 1px solid black;
+  border-radius: 20px;
+  margin: 1em 2em;
+  padding: 1em;
+}
+
+/*------- NAVBAR -------*/
+
+nav.navbar {
+  border-bottom: 1px solid black;
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+}
+
+.navbar p {
   margin: 0;
-  text-align: center;
-  color: #293c4b;
 }
 
-h1 {
-  font-size: 30px;
+.app-title {
+  padding-left: 0.5em;
 }
 
-img {
-  margin: 20px 0;
-  max-width: 200px;
+/*------- FOOTER -------*/
+
+div.app-footer {
+  border-top: 1px solid black;
+  margin-top: 1em;
+  padding-top: 1em;
 }
