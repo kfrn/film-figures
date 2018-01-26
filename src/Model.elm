@@ -1,10 +1,13 @@
 module Model exposing (Model, init)
 
+import Translate exposing (Language(..))
 import Types exposing (..)
 
 
 type alias Model =
-    { system : SystemOfMeasurement }
+    { language : Language
+    , system : SystemOfMeasurement
+    }
 
 
 init : ( Model, Cmd msg )
@@ -14,5 +17,6 @@ init =
 
 initialModel : Model
 initialModel =
-    { system = Imperial
+    { language = EN
+    , system = Imperial
     }

@@ -1,8 +1,10 @@
 module View exposing (view)
 
-import Html exposing (Html, div, em, h1, i, nav, p, span, text)
-import Html.Attributes exposing (attribute, class, id)
+import Html exposing (Html, button, div, em, h1, i, nav, p, span, text)
+import Html.Attributes exposing (attribute, class, classList, id)
+import Html.Events exposing (onClick)
 import Model exposing (Model)
+import Translate exposing (AppString(..), Language(..), allLanguages, translate)
 import Types exposing (..)
 import Update exposing (Msg(..))
 
@@ -10,14 +12,14 @@ import Update exposing (Msg(..))
 view : Model -> Html Msg
 view model =
     div [ id "container" ]
-        [ navbar model.system
+        [ navbar model.language model.system
         , div [] [ text <| "content will go here" ]
-        , footer
+        , footer model.language
         ]
 
 
-navbar : SystemOfMeasurement -> Html Msg
-navbar system =
+navbar : Language -> SystemOfMeasurement -> Html Msg
+navbar language system =
     nav [ class "navbar", attribute "role" "navigation" ]
         [ div [ class "navbar-brand" ]
             [ div [ class "navbar-item" ]
@@ -30,17 +32,33 @@ navbar system =
         , div [ class "navbar-menu" ]
             [ div [ class "navbar-start" ]
                 [ div [ class "navbar-item" ]
-                    [ p [ class "is-size-6" ] [ em [] [ text "a calculator for analogue film" ] ]
+                    [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
                     ]
                 ]
-            , div [ class "navbar-end" ] [ text "measurement controls here" ]
+            , div [ class "navbar-end" ] [ languageControls language ]
             ]
         ]
 
 
-footer : Html Msg
-footer =
+languageControls : Language -> Html Msg
+languageControls language =
+    let
+        makeButton l =
+            button
+                [ classList
+                    [ ( "button is-small", True )
+                    , ( "is-primary", l == language )
+                    ]
+                , onClick (ChangeLanguage l)
+                ]
+                [ text (toString l) ]
+    in
+    div [ class "navbar-item" ] (List.map makeButton allLanguages)
+
+
+footer : Language -> Html Msg
+footer language =
     div [ class "level app-footer" ]
-        [ div [ class "level-left" ] [ text "app by KFN" ]
+        [ div [ class "level-left" ] [ text <| translate language DevelopedByStr ]
         , div [ class "is-size-6" ] [ text "links here" ]
         ]

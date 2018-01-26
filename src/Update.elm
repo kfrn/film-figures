@@ -1,12 +1,19 @@
 module Update exposing (Msg(..), update)
 
 import Model exposing (Model)
+import Translate exposing (Language(..))
 
 
 type Msg
-    = NoOp
+    = ChangeLanguage Language
+    | NoOp
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ChangeLanguage l ->
+            ( { model | language = l }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
