@@ -1,5 +1,6 @@
 module View exposing (view)
 
+import Helpers exposing (displayNameForControl, displayNameForGauge)
 import Html exposing (Html, button, div, em, h1, i, nav, p, span, text)
 import Html.Attributes exposing (attribute, class, classList, id)
 import Html.Events exposing (onClick)
@@ -14,7 +15,9 @@ view : Model -> Html Msg
 view model =
     div [ id "container" ]
         [ navbar model.language model.system
-        , div [] [ text <| "content will go here" ]
+        , calculator model
+
+        -- , div [] [ text "results will go here" ]
         , footer model.language
         ]
 
@@ -87,3 +90,44 @@ footer language =
         [ div [ class "level-left left-offset" ] [ text <| translate language DevelopedByStr ]
         , div [ class "is-size-6 right-offset" ] [ link Email, link SourceCode ]
         ]
+
+
+calculator : Model -> Html Msg
+calculator model =
+    let
+        makeGaugeButton g =
+            button
+                [ classList
+                    [ ( "button", True )
+                    , ( "is-primary", g == model.gauge )
+                    ]
+                , onClick <| ChangeGauge g
+                ]
+                [ text <| displayNameForGauge g ]
+    in
+    div [ id "calculator", class "left-offset right-offset" ]
+        [ div [ id "gauge", class "calculator" ]
+            [ p [] [ text "Your film reel is:" ]
+            , div [] (List.map makeGaugeButton allGauges)
+            ]
+        , div [ id "other-controls", class "calculator" ]
+            [ p [] [ text "And you know its:" ]
+            , div [ class "columns" ]
+                (List.map (makeControl model.controlInFocus) allControls)
+            ]
+
+        -- , button [ class "button" ] [ text "Calculate!" ]
+        ]
+
+
+makeControl : Control -> Control -> Html Msg
+makeControl controlInFocus control =
+    div
+        [ classList
+            [ ( "column", True )
+            , ( "control-panel", True )
+            , ( "control-selected", control == controlInFocus )
+            ]
+        , onClick <| ChangeControlInFocus control
+        ]
+        [ text <| displayNameForControl control ]

@@ -5,7 +5,9 @@ import Types exposing (..)
 
 
 type alias Model =
-    { language : Language
+    { gauge : Gauge
+    , language : Language
+    , controlInFocus : Control
     , system : SystemOfMeasurement
     }
 
@@ -17,6 +19,8 @@ init =
 
 initialModel : Model
 initialModel =
-    { language = EN
+    { gauge = ThirtyFive
+    , language = EN
+    , controlInFocus = LengthControl
     , system = Imperial
     }

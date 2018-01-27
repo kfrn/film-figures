@@ -2,12 +2,14 @@ module Update exposing (Msg(..), update)
 
 import Model exposing (Model)
 import Translate exposing (Language(..))
-import Types exposing (SystemOfMeasurement(..))
+import Types exposing (Control(..), Gauge(..), SystemOfMeasurement(..))
 
 
 type Msg
     = ChangeLanguage Language
     | ChangeSystemOfMeasurement SystemOfMeasurement
+    | ChangeGauge Gauge
+    | ChangeControlInFocus Control
     | NoOp
 
 
@@ -24,6 +26,12 @@ update msg model =
 
                 Imperial ->
                     ( { model | system = Imperial }, Cmd.none )
+
+        ChangeGauge g ->
+            ( { model | gauge = g }, Cmd.none )
+
+        ChangeControlInFocus control ->
+            ( { model | controlInFocus = control }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
