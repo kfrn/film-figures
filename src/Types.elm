@@ -27,6 +27,22 @@ type Control
     | FrameCountControl
 
 
+type alias ControlInFocus =
+    Control
+
+
 allControls : List Control
 allControls =
     [ LengthControl, DurationControl, FrameCountControl ]
+
+
+type alias LengthInFeet =
+    Float
+
+
+type alias DurationInSeconds =
+    Float
+
+
+type alias FrameCount =
+    Float

@@ -5,10 +5,13 @@ import Types exposing (..)
 
 
 type alias Model =
-    { gauge : Gauge
+    { system : SystemOfMeasurement
     , language : Language
+    , gauge : Gauge
     , controlInFocus : Control
-    , system : SystemOfMeasurement
+    , duration : Maybe DurationInSeconds
+    , frameCount : Maybe FrameCount
+    , length : Maybe LengthInFeet
     }
 
 
@@ -19,8 +22,11 @@ init =
 
 initialModel : Model
 initialModel =
-    { gauge = ThirtyFive
+    { system = Imperial
     , language = EN
+    , gauge = ThirtyFive
     , controlInFocus = LengthControl
-    , system = Imperial
+    , duration = Nothing
+    , frameCount = Nothing
+    , length = Nothing
     }

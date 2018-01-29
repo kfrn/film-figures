@@ -1,9 +1,9 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForControl, displayNameForGauge)
-import Html exposing (Html, button, div, em, h1, i, nav, p, span, text)
-import Html.Attributes exposing (attribute, class, classList, id)
-import Html.Events exposing (onClick)
+import Helpers exposing (displayNameForGauge)
+import Html exposing (Html, button, div, em, h1, i, input, label, nav, p, span, text)
+import Html.Attributes exposing (attribute, class, classList, id, placeholder)
+import Html.Events exposing (onClick, onInput)
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
 import Translate exposing (AppString(..), Language(..), allLanguages, translate)
@@ -111,23 +111,45 @@ calculator model =
             , div [] (List.map makeGaugeButton allGauges)
             ]
         , div [ id "other-controls", class "calculator" ]
-            [ p [] [ text "And you know its:" ]
+            [ p [] [ text "Set one of the following:" ]
             , div [ class "columns" ]
                 (List.map (makeControl model.controlInFocus) allControls)
             ]
-
-        -- , button [ class "button" ] [ text "Calculate!" ]
         ]
 
 
-makeControl : Control -> Control -> Html Msg
+makeControl : ControlInFocus -> Control -> Html Msg
 makeControl controlInFocus control =
+    let
+        makeInputSection placeholderText message labelText =
+            div [ class "field" ]
+                [ input
+                    [ classList [ ( "input", True ) ]
+                    , placeholder placeholderText
+                    , onInput message
+                    ]
+                    []
+                , p [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
+                ]
+
+        inputSection =
+            case control of
+                LengthControl ->
+                    makeInputSection "400" UpdateLength "feet"
+
+                DurationControl ->
+                    makeInputSection "360" UpdateDuration "seconds"
+
+                FrameCountControl ->
+                    makeInputSection "320" UpdateFrameCount "frames"
+    in
     div
         [ classList
             [ ( "column", True )
             , ( "control-panel", True )
-            , ( "control-selected", control == controlInFocus )
+            , ( "control-focused", control == controlInFocus )
+            , ( "control-unfocused", control /= controlInFocus )
             ]
         , onClick <| ChangeControlInFocus control
         ]
-        [ text <| displayNameForControl control ]
+        [ inputSection ]

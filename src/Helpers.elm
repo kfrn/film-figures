@@ -11,16 +11,3 @@ displayNameForGauge gauge =
 
         Sixteen ->
             "16mm"
-
-
-displayNameForControl : Control -> String
-displayNameForControl control =
-    case control of
-        LengthControl ->
-            "length"
-
-        DurationControl ->
-            "duration"
-
-        FrameCountControl ->
-            "frame count"

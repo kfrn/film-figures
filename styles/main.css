@@ -48,7 +48,7 @@ div.app-footer {
 
 #calculator {
   text-align: center;
-  max-width: 70%; /* TODO: check */
+  max-width: 60%;
   margin: 0 auto;
 }
 
@@ -60,13 +60,19 @@ div.app-footer {
   padding-bottom: 0.5em;
 }
 
+.calculator input {
+  max-width: 80px;
+}
+
 .control-panel {
-  border: 1px solid black;
   border-radius: 5px;
-  padding: 1em;
   margin: 1em;
 }
 
-.control-selected {
+.control-focused {
   background-color: #00d1b2;
+}
+
+.control-unfocused {
+  border: 1px solid lightgrey;
 }

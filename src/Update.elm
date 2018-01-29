@@ -2,7 +2,7 @@ module Update exposing (Msg(..), update)
 
 import Model exposing (Model)
 import Translate exposing (Language(..))
-import Types exposing (Control(..), Gauge(..), SystemOfMeasurement(..))
+import Types exposing (..)
 
 
 type Msg
@@ -10,6 +10,9 @@ type Msg
     | ChangeSystemOfMeasurement SystemOfMeasurement
     | ChangeGauge Gauge
     | ChangeControlInFocus Control
+    | UpdateLength String
+    | UpdateDuration String
+    | UpdateFrameCount String
     | NoOp
 
 
@@ -32,6 +35,42 @@ update msg model =
 
         ChangeControlInFocus control ->
             ( { model | controlInFocus = control }, Cmd.none )
+
+        UpdateLength len ->
+            case String.toFloat len of
+                Ok l ->
+                    let
+                        newModel =
+                            { model | length = Just l }
+                    in
+                    ( newModel, Cmd.none )
+
+                Err e ->
+                    ( model, Cmd.none )
+
+        UpdateDuration duration ->
+            case String.toFloat duration of
+                Ok d ->
+                    let
+                        newModel =
+                            { model | duration = Just d }
+                    in
+                    ( newModel, Cmd.none )
+
+                Err e ->
+                    ( model, Cmd.none )
+
+        UpdateFrameCount framecount ->
+            case String.toFloat framecount of
+                Ok fc ->
+                    let
+                        newModel =
+                            { model | frameCount = Just fc }
+                    in
+                    ( newModel, Cmd.none )
+
+                Err e ->
+                    ( model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
