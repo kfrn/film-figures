@@ -14,10 +14,10 @@ npm install -g create-elm-app
 elm-app start
 ```
 
-<!-- To run tests:
+To run tests:
 ```
 elm-app test
-``` -->
+```
 
 <!-- To deploy to github pages:
 ```
