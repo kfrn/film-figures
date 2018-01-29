@@ -123,14 +123,18 @@ makeControl : Model -> Control -> Html Msg
 makeControl model control =
     let
         makeInputSection placeholderText message labelText =
-            div [ class "field" ]
-                [ input
-                    [ classList [ ( "input", True ) ]
-                    , placeholder placeholderText
-                    , onInput message
+            div [ class "field is-horizontal" ]
+                [ div [ class "field-body" ]
+                    [ input
+                            [ classList [ ( "input", True ) ]
+                            , placeholder placeholderText
+                            , onInput message
+                            ]
+                            []
                     ]
-                    []
-                , p [ classList [ ( "label", control == model.controlInFocus ) ] ] [ text labelText ]
+                , div [ class "field-label is-normal" ]
+                    [ label [ classList [ ( "label", True ) ] ] [ text labelText ]
+                    ]
                 ]
 
         inputSection =
