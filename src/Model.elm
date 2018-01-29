@@ -11,7 +11,7 @@ type alias Model =
     , controlInFocus : Control
     , duration : Maybe DurationInSeconds
     , frameCount : Maybe FrameCount
-    , length : Maybe LengthInFeet
+    , footage : Maybe FootageInFeet
     }
 
 
@@ -25,8 +25,8 @@ initialModel =
     { system = Imperial
     , language = EN
     , gauge = ThirtyFive
-    , controlInFocus = LengthControl
+    , controlInFocus = FootageControl
     , duration = Nothing
     , frameCount = Nothing
-    , length = Nothing
+    , footage = Nothing
     }

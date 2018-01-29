@@ -1,5 +1,6 @@
 module Helpers exposing (..)
 
+import Round
 import Types exposing (..)
 
 
@@ -11,3 +12,16 @@ displayNameForGauge gauge =
 
         Sixteen ->
             "16mm"
+
+
+getDisplayValue : Float -> Int -> String
+getDisplayValue val dp =
+    if isWholeFloat val then
+        toString <| floor val
+    else
+        Round.round dp val
+
+
+isWholeFloat : Float -> Bool
+isWholeFloat num =
+    num - (toFloat <| floor num) == 0

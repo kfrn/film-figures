@@ -22,7 +22,7 @@ allGauges =
 
 
 type Control
-    = LengthControl
+    = FootageControl
     | DurationControl
     | FrameCountControl
 
@@ -33,10 +33,10 @@ type alias ControlInFocus =
 
 allControls : List Control
 allControls =
-    [ LengthControl, DurationControl, FrameCountControl ]
+    [ FootageControl, DurationControl, FrameCountControl ]
 
 
-type alias LengthInFeet =
+type alias FootageInFeet =
     Float
 
 

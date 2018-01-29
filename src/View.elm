@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForGauge)
+import Helpers exposing (displayNameForGauge, getDisplayValue)
 import Html exposing (Html, button, div, em, h1, i, input, label, nav, p, span, text)
 import Html.Attributes exposing (attribute, class, classList, id, placeholder)
 import Html.Events exposing (onClick, onInput)
@@ -15,9 +15,10 @@ view : Model -> Html Msg
 view model =
     div [ id "container" ]
         [ navbar model.language model.system
-        , calculator model
-
-        -- , div [] [ text "results will go here" ]
+        , div [ id "app" ]
+            [ calculator model
+            , results model
+            ]
         , footer model.language
         ]
 
@@ -105,7 +106,7 @@ calculator model =
                 ]
                 [ text <| displayNameForGauge g ]
     in
-    div [ id "calculator", class "left-offset right-offset" ]
+    div [ id "calculator" ]
         [ div [ id "gauge", class "calculator" ]
             [ p [] [ text "Your film reel is:" ]
             , div [] (List.map makeGaugeButton allGauges)
@@ -113,13 +114,13 @@ calculator model =
         , div [ id "other-controls", class "calculator" ]
             [ p [] [ text "Set one of the following:" ]
             , div [ class "columns" ]
-                (List.map (makeControl model.controlInFocus) allControls)
+                (List.map (makeControl model) allControls)
             ]
         ]
 
 
-makeControl : ControlInFocus -> Control -> Html Msg
-makeControl controlInFocus control =
+makeControl : Model -> Control -> Html Msg
+makeControl model control =
     let
         makeInputSection placeholderText message labelText =
             div [ class "field" ]
@@ -129,27 +130,78 @@ makeControl controlInFocus control =
                     , onInput message
                     ]
                     []
-                , p [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
+                , p [ classList [ ( "label", control == model.controlInFocus ) ] ] [ text labelText ]
                 ]
 
         inputSection =
             case control of
-                LengthControl ->
-                    makeInputSection "400" UpdateLength "feet"
+                FootageControl ->
+                    let
+                        placeholderValue =
+                            -- case model.footage of
+                            --     Just ft ->
+                            --         Round.round 2 ft
+                            --
+                            --     Nothing ->
+                            "-"
+                    in
+                    makeInputSection placeholderValue UpdateFootage "feet"
 
                 DurationControl ->
-                    makeInputSection "360" UpdateDuration "seconds"
+                    let
+                        placeholderValue =
+                            -- case model.duration of
+                            --     Just dur ->
+                            --         Round.round 2 dur
+                            --
+                            --     Nothing ->
+                            "-"
+                    in
+                    makeInputSection placeholderValue UpdateDuration "seconds"
 
                 FrameCountControl ->
-                    makeInputSection "320" UpdateFrameCount "frames"
+                    let
+                        placeholderValue =
+                            -- case model.frameCount of
+                            --     Just fc ->
+                            --         Round.round 1 fc
+                            --
+                            --     Nothing ->
+                            "-"
+                    in
+                    makeInputSection placeholderValue UpdateFrameCount "frames"
     in
     div
         [ classList
             [ ( "column", True )
             , ( "control-panel", True )
-            , ( "control-focused", control == controlInFocus )
-            , ( "control-unfocused", control /= controlInFocus )
+            , ( "control-focused", control == model.controlInFocus )
+            , ( "control-unfocused", control /= model.controlInFocus )
             ]
         , onClick <| ChangeControlInFocus control
         ]
         [ inputSection ]
+
+
+results : Model -> Html Msg
+results model =
+    case ( model.duration, model.frameCount, model.footage ) of
+        ( Just dur, Just fc, Just ft ) ->
+            let
+                duration =
+                    getDisplayValue dur 2
+
+                footage =
+                    getDisplayValue ft 1
+
+                frameCount =
+                    getDisplayValue fc 1
+            in
+            div [ class "columns" ]
+                [ div [ class "column" ] [ text <| footage ++ " ft" ]
+                , div [ class "column" ] [ text <| duration ++ " seconds" ]
+                , div [ class "column" ] [ text <| frameCount ++ " frames" ]
+                ]
+
+        ( _, _, _ ) ->
+            div [] []

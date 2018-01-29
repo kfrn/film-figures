@@ -1,5 +1,6 @@
 module Update exposing (Msg(..), update)
 
+import Calculate
 import Model exposing (Model)
 import Translate exposing (Language(..))
 import Types exposing (..)
@@ -10,7 +11,7 @@ type Msg
     | ChangeSystemOfMeasurement SystemOfMeasurement
     | ChangeGauge Gauge
     | ChangeControlInFocus Control
-    | UpdateLength String
+    | UpdateFootage String
     | UpdateDuration String
     | UpdateFrameCount String
     | NoOp
@@ -31,17 +32,28 @@ update msg model =
                     ( { model | system = Imperial }, Cmd.none )
 
         ChangeGauge g ->
-            ( { model | gauge = g }, Cmd.none )
+            let
+                newModel =
+                    { model | gauge = g }
+            in
+            ( newModel, Cmd.none )
 
         ChangeControlInFocus control ->
-            ( { model | controlInFocus = control }, Cmd.none )
+            let
+                newModel =
+                    { model | controlInFocus = control }
+            in
+            ( { newModel | controlInFocus = control }, Cmd.none )
 
-        UpdateLength len ->
-            case String.toFloat len of
-                Ok l ->
+        UpdateFootage footage ->
+            case String.toFloat footage of
+                Ok ft ->
                     let
+                        ( dur, fc ) =
+                            Calculate.fromFootage model.gauge ft
+
                         newModel =
-                            { model | length = Just l }
+                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -50,10 +62,13 @@ update msg model =
 
         UpdateDuration duration ->
             case String.toFloat duration of
-                Ok d ->
+                Ok dur ->
                     let
+                        ( fc, ft ) =
+                            Calculate.fromDuration model.gauge dur
+
                         newModel =
-                            { model | duration = Just d }
+                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -64,8 +79,11 @@ update msg model =
             case String.toFloat framecount of
                 Ok fc ->
                     let
+                        ( dur, ft ) =
+                            Calculate.fromFrameCount model.gauge fc
+
                         newModel =
-                            { model | frameCount = Just fc }
+                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
                     in
                     ( newModel, Cmd.none )
 
