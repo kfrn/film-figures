@@ -53,7 +53,7 @@ update msg model =
                             Calculate.fromFootage model.gauge ft
 
                         newModel =
-                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
+                            { model | duration = dur, frameCount = fc, footage = ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -68,7 +68,7 @@ update msg model =
                             Calculate.fromDuration model.gauge dur
 
                         newModel =
-                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
+                            { model | duration = dur, frameCount = fc, footage = ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -83,7 +83,7 @@ update msg model =
                             Calculate.fromFrameCount model.gauge fc
 
                         newModel =
-                            { model | duration = Just dur, frameCount = Just fc, footage = Just ft }
+                            { model | duration = dur, frameCount = fc, footage = ft }
                     in
                     ( newModel, Cmd.none )
 

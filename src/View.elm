@@ -1,8 +1,8 @@
 module View exposing (view)
 
 import Helpers exposing (displayNameForGauge, getDisplayValue)
-import Html exposing (Html, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes exposing (attribute, class, classList, id, placeholder)
+import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
+import Html.Attributes exposing (attribute, class, classList, id, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
@@ -15,10 +15,7 @@ view : Model -> Html Msg
 view model =
     div [ id "container" ]
         [ navbar model.language model.system
-        , div [ id "app" ]
-            [ calculator model
-            , results model
-            ]
+        , calculator model
         , footer model.language
         ]
 
@@ -112,68 +109,56 @@ calculator model =
             , div [] (List.map makeGaugeButton allGauges)
             ]
         , div [ id "other-controls", class "calculator" ]
-            [ p [] [ text "Set one of the following:" ]
+            [ p [] [ text "Set one of the following (click to focus):" ]
             , div [ class "columns" ]
-                (List.map (makeControl model) allControls)
+                (List.map (makePanel model) allControls)
             ]
         ]
 
 
-makeControl : Model -> Control -> Html Msg
-makeControl model control =
+makePanel : Model -> Control -> Html Msg
+makePanel model control =
     let
-        makeInputSection placeholderText message labelText =
-            div [ class "field is-horizontal" ]
-                [ div [ class "field-body" ]
-                    [ input
-                            [ classList [ ( "input", True ) ]
-                            , placeholder placeholderText
-                            , onInput message
-                            ]
-                            []
-                    ]
-                , div [ class "field-label is-normal" ]
-                    [ label [ classList [ ( "label", True ) ] ] [ text labelText ]
-                    ]
-                ]
+        duration =
+            getDisplayValue model.duration 2
 
-        inputSection =
+        footage =
+            getDisplayValue model.footage 1
+
+        frameCount =
+            getDisplayValue model.frameCount 1
+
+        panel =
             case control of
                 FootageControl ->
                     let
-                        placeholderValue =
-                            -- case model.footage of
-                            --     Just ft ->
-                            --         Round.round 2 ft
-                            --
-                            --     Nothing ->
-                            "-"
+                        labelText =
+                            "feet"
                     in
-                    makeInputSection placeholderValue UpdateFootage "feet"
+                    if model.controlInFocus == FootageControl then
+                        makeInputSection footage UpdateFootage labelText
+                    else
+                        makeInfoSection control model.controlInFocus footage labelText
 
                 DurationControl ->
                     let
-                        placeholderValue =
-                            -- case model.duration of
-                            --     Just dur ->
-                            --         Round.round 2 dur
-                            --
-                            --     Nothing ->
-                            "-"
+                        labelText =
+                            "seconds"
                     in
-                    makeInputSection placeholderValue UpdateDuration "seconds"
+                    if model.controlInFocus == DurationControl then
+                        makeInputSection duration UpdateDuration labelText
+                    else
+                        makeInfoSection control model.controlInFocus duration labelText
 
                 FrameCountControl ->
                     let
-                        placeholderValue =
-                            -- case model.frameCount of
-                            --     Just fc ->
-                            --         Round.round 1 fc
-                            --
-                            --     Nothing ->
-                            "-"
+                        labelText =
+                            "frames"
                     in
-                    makeInputSection placeholderValue UpdateFrameCount "frames"
+                    if model.controlInFocus == FrameCountControl then
+                        makeInputSection frameCount UpdateFrameCount labelText
+                    else
+                        makeInfoSection control model.controlInFocus frameCount labelText
     in
     div
         [ classList
@@ -184,28 +169,31 @@ makeControl model control =
             ]
         , onClick <| ChangeControlInFocus control
         ]
-        [ inputSection ]
+        [ panel ]
 
 
-results : Model -> Html Msg
-results model =
-    case ( model.duration, model.frameCount, model.footage ) of
-        ( Just dur, Just fc, Just ft ) ->
-            let
-                duration =
-                    getDisplayValue dur 2
-
-                footage =
-                    getDisplayValue ft 1
-
-                frameCount =
-                    getDisplayValue fc 1
-            in
-            div [ class "columns" ]
-                [ div [ class "column" ] [ text <| footage ++ " ft" ]
-                , div [ class "column" ] [ text <| duration ++ " seconds" ]
-                , div [ class "column" ] [ text <| frameCount ++ " frames" ]
+makeInputSection : String -> (String -> Msg) -> String -> Html Msg
+makeInputSection paramValue message labelText =
+    div [ class "field is-horizontal" ]
+        [ div [ class "field-body" ]
+            [ input
+                [ classList [ ( "input", True ) ]
+                , placeholder paramValue
+                , onInput message
                 ]
+                []
+            ]
+        , div [ class "field-label is-normal" ]
+            [ label [ classList [ ( "label", True ) ] ] [ text labelText ]
+            ]
+        ]
 
-        ( _, _, _ ) ->
-            div [] []
+
+makeInfoSection : Control -> ControlInFocus -> String -> String -> Html Msg
+makeInfoSection control controlInFocus paramValue labelText =
+    div [ class "field is-horizontal" ]
+        [ div [ class "field-label field-label-left is-normal" ] [ b [] [ text paramValue ] ]
+        , div [ class "field-label is-normal" ]
+            [ label [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
+            ]
+        ]

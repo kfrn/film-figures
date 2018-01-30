@@ -44,15 +44,13 @@ div.app-footer {
   padding-top: 1em;
 }
 
-/*------- APP -------*/
+/*------- CALCULATOR -------*/
 
-#app {
+#calculator {
   text-align: center;
   max-width: 80%;
   margin: 0 auto;
 }
-
-/*------- CALCULATOR -------*/
 
 .calculator {
   padding: 0.5em;
@@ -82,4 +80,8 @@ div.app-footer {
 .field-label {
   /* overriding Bulma */
   margin: auto 0.5em auto 0.5em;
+}
+
+.field-label-left {
+  margin: 0 2.5em 0 0;
 }

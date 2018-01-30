@@ -47,6 +47,18 @@ all =
                     \_ ->
                         Expect.equal frameCount 10000
                 ]
+            , describe "gauge = 35mm and footage is 180'" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage ThirtyFive 180
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal duration 120
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal frameCount 2880
+                ]
             ]
         , describe "calculate duration and footage from frame count" <|
             [ describe "gauge = 35mm and frame count = 400" <|

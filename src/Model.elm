@@ -9,9 +9,9 @@ type alias Model =
     , language : Language
     , gauge : Gauge
     , controlInFocus : Control
-    , duration : Maybe DurationInSeconds
-    , frameCount : Maybe FrameCount
-    , footage : Maybe FootageInFeet
+    , duration : DurationInSeconds
+    , frameCount : FrameCount
+    , footage : FootageInFeet
     }
 
 
@@ -26,7 +26,7 @@ initialModel =
     , language = EN
     , gauge = ThirtyFive
     , controlInFocus = FootageControl
-    , duration = Nothing
-    , frameCount = Nothing
-    , footage = Nothing
+    , duration = 120
+    , frameCount = 2880
+    , footage = 180
     }
