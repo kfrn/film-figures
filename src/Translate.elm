@@ -14,8 +14,13 @@ allLanguages =
 
 type AppString
     = DevelopedByStr
+    | FeetStr
+    | FramesStr
+    | GaugeStr
     | ImperialStr
     | MetricStr
+    | SecondsStr
+    | SetOptionStr
     | TaglineStr
 
 
@@ -30,6 +35,24 @@ translate language appString =
                     , it = "Applicazione web di Katherine Frances Nagels"
                     }
 
+                FeetStr ->
+                    { en = "feet"
+                    , fr = "pieds"
+                    , it = "piedi"
+                    }
+
+                FramesStr ->
+                    { en = "frames"
+                    , fr = "cadres"
+                    , it = "fotogramme"
+                    }
+
+                GaugeStr ->
+                    { en = "Choose a gauge:"
+                    , fr = "Choisir un format:"
+                    , it = "Scegliere un formato:"
+                    }
+
                 ImperialStr ->
                     { en = "imperial"
                     , fr = "impérial"
@@ -40,6 +63,18 @@ translate language appString =
                     { en = "metric"
                     , fr = "métrique"
                     , it = "metrico"
+                    }
+
+                SecondsStr ->
+                    { en = "seconds"
+                    , fr = "secondes"
+                    , it = "secondi"
+                    }
+
+                SetOptionStr ->
+                    { en = "Set one of the following (click to focus):"
+                    , fr = "Définissez une option (cliquez pour sélectionner):"
+                    , it = "Imposta un'opzione (clicca per selezionare)"
                     }
 
                 TaglineStr ->

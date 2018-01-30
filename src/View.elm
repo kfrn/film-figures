@@ -37,7 +37,9 @@ navbar language system =
                     [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
                     ]
                 ]
-            , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
+
+            -- , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
+            , div [ class "navbar-end" ] [ languageControls language ]
             ]
         ]
 
@@ -105,11 +107,11 @@ calculator model =
     in
     div [ id "calculator" ]
         [ div [ id "gauge", class "calculator" ]
-            [ p [] [ text "Your film reel is:" ]
+            [ p [] [ text <| translate model.language GaugeStr ]
             , div [] (List.map makeGaugeButton allGauges)
             ]
         , div [ id "other-controls", class "calculator" ]
-            [ p [] [ text "Set one of the following (click to focus):" ]
+            [ p [] [ text <| translate model.language SetOptionStr ]
             , div [ class "columns" ]
                 (List.map (makePanel model) allControls)
             ]
@@ -133,7 +135,7 @@ makePanel model control =
                 FootageControl ->
                     let
                         labelText =
-                            "feet"
+                            translate model.language FeetStr
                     in
                     if model.controlInFocus == FootageControl then
                         makeInputSection footage UpdateFootage labelText
@@ -143,7 +145,7 @@ makePanel model control =
                 DurationControl ->
                     let
                         labelText =
-                            "seconds"
+                            translate model.language SecondsStr
                     in
                     if model.controlInFocus == DurationControl then
                         makeInputSection duration UpdateDuration labelText
@@ -153,7 +155,7 @@ makePanel model control =
                 FrameCountControl ->
                     let
                         labelText =
-                            "frames"
+                            translate model.language FramesStr
                     in
                     if model.controlInFocus == FrameCountControl then
                         makeInputSection frameCount UpdateFrameCount labelText
