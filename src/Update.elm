@@ -31,12 +31,37 @@ update msg model =
                 Imperial ->
                     ( { model | system = Imperial }, Cmd.none )
 
-        ChangeGauge g ->
-            let
-                newModel =
-                    { model | gauge = g }
-            in
-            ( newModel, Cmd.none )
+        ChangeGauge filmGauge ->
+            case model.controlInFocus of
+                FootageControl ->
+                    let
+                        ( dur, fc ) =
+                            Calculate.fromFootage filmGauge model.footage
+
+                        newModel =
+                            { model | gauge = filmGauge, duration = dur, frameCount = fc, footage = model.footage }
+                    in
+                    ( newModel, Cmd.none )
+
+                DurationControl ->
+                    let
+                        ( fc, ft ) =
+                            Calculate.fromDuration filmGauge model.duration
+
+                        newModel =
+                            { model | gauge = filmGauge, duration = model.duration, frameCount = fc, footage = ft }
+                    in
+                    ( newModel, Cmd.none )
+
+                FrameCountControl ->
+                    let
+                        ( dur, ft ) =
+                            Calculate.fromFrameCount filmGauge model.frameCount
+
+                        newModel =
+                            { model | gauge = filmGauge, duration = dur, frameCount = model.frameCount, footage = ft }
+                    in
+                    ( newModel, Cmd.none )
 
         ChangeControlInFocus control ->
             let
