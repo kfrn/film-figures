@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForGauge, getDisplayValue)
+import Helpers exposing (displayNameForGauge, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
 import Html.Attributes exposing (attribute, class, classList, id, placeholder, value)
 import Html.Events exposing (onClick, onInput)
@@ -121,16 +121,14 @@ calculator model =
 makePanel : Model -> Control -> Html Msg
 makePanel model control =
     let
-        duration =
-            getDisplayValue model.duration 2
-
         footage =
             getDisplayValue model.footage 2
 
         frameCount =
             getDisplayValue model.frameCount 1
 
-        inFocus control = model.controlInFocus == control
+        inFocus control =
+            model.controlInFocus == control
 
         panel =
             case control of
@@ -146,13 +144,18 @@ makePanel model control =
 
                 DurationControl ->
                     let
+                        duration =
+                            getDisplayValue model.duration 2
+
                         labelText =
                             translate model.language SecondsStr
                     in
                     if inFocus control then
                         makeInputSection duration UpdateDuration labelText
                     else
-                        makeInfoSection control model.controlInFocus duration labelText
+                        div [ class "field is-horizontal" ]
+                            [ div [ class "field-label is-normal param-centered" ] [ b [] [ text <| formatDuration model.duration ] ]
+                            ]
 
                 FrameCountControl ->
                     let
