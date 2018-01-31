@@ -20,8 +20,7 @@ link name =
                 ]
 
         SourceCode ->
-            a [ href "#" ]
-                -- TODO: add actual link!
+            a [ href "https://github.com/kfrn/film-figures" ]
                 [ span [ class "icon" ]
                     [ i [ class "fa fa-github" ] []
                     ]

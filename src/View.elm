@@ -125,10 +125,12 @@ makePanel model control =
             getDisplayValue model.duration 2
 
         footage =
-            getDisplayValue model.footage 1
+            getDisplayValue model.footage 2
 
         frameCount =
             getDisplayValue model.frameCount 1
+
+        inFocus control = model.controlInFocus == control
 
         panel =
             case control of
@@ -137,7 +139,7 @@ makePanel model control =
                         labelText =
                             translate model.language FeetStr
                     in
-                    if model.controlInFocus == FootageControl then
+                    if inFocus control then
                         makeInputSection footage UpdateFootage labelText
                     else
                         makeInfoSection control model.controlInFocus footage labelText
@@ -147,7 +149,7 @@ makePanel model control =
                         labelText =
                             translate model.language SecondsStr
                     in
-                    if model.controlInFocus == DurationControl then
+                    if inFocus control then
                         makeInputSection duration UpdateDuration labelText
                     else
                         makeInfoSection control model.controlInFocus duration labelText
@@ -157,7 +159,7 @@ makePanel model control =
                         labelText =
                             translate model.language FramesStr
                     in
-                    if model.controlInFocus == FrameCountControl then
+                    if inFocus control then
                         makeInputSection frameCount UpdateFrameCount labelText
                     else
                         makeInfoSection control model.controlInFocus frameCount labelText
@@ -194,7 +196,7 @@ makeInputSection paramValue message labelText =
 makeInfoSection : Control -> ControlInFocus -> String -> String -> Html Msg
 makeInfoSection control controlInFocus paramValue labelText =
     div [ class "field is-horizontal" ]
-        [ div [ class "field-label field-label-left is-normal" ] [ b [] [ text paramValue ] ]
+        [ div [ class "field-label param-value is-normal" ] [ b [] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
             [ label [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
             ]

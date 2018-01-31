@@ -82,6 +82,7 @@ div.app-footer {
   margin: auto 0.5em auto 0.5em;
 }
 
-.field-label-left {
-  margin: 0 2.5em 0 0;
+.param-value {
+  /* partially overriding Bulma's field-label */
+  margin: auto 2.5em auto auto;
 }
