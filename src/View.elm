@@ -2,7 +2,7 @@ module View exposing (view)
 
 import Helpers exposing (displayNameForGauge, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes exposing (attribute, class, classList, id, placeholder, value)
+import Html.Attributes as Attrs exposing (attribute, class, classList, id, min, placeholder, step, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
@@ -130,7 +130,8 @@ makePanel model control =
         frameCount =
             getDisplayValue model.frameCount 1
 
-        inFocus control = model.controlInFocus == control
+        inFocus control =
+            model.controlInFocus == control
 
         panel =
             case control of
@@ -140,7 +141,7 @@ makePanel model control =
                             translate model.language FeetStr
                     in
                     if inFocus control then
-                        makeInputSection footage UpdateFootage labelText
+                        makeInputSection footage UpdateFootage labelText "0.01"
                     else
                         makeInfoSection control model.controlInFocus footage labelText
 
@@ -150,7 +151,7 @@ makePanel model control =
                             translate model.language SecondsStr
                     in
                     if inFocus control then
-                        makeInputSection duration UpdateDuration labelText
+                        makeInputSection duration UpdateDuration labelText "0.1"
                     else
                         makeInfoSection control model.controlInFocus duration labelText
 
@@ -160,7 +161,7 @@ makePanel model control =
                             translate model.language FramesStr
                     in
                     if inFocus control then
-                        makeInputSection frameCount UpdateFrameCount labelText
+                        makeInputSection frameCount UpdateFrameCount labelText "1"
                     else
                         makeInfoSection control model.controlInFocus frameCount labelText
     in
@@ -176,13 +177,16 @@ makePanel model control =
         [ panel ]
 
 
-makeInputSection : String -> (String -> Msg) -> String -> Html Msg
-makeInputSection paramValue message labelText =
+makeInputSection : String -> (String -> Msg) -> String -> String -> Html Msg
+makeInputSection paramValue message labelText stepvalue =
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
+                , type_ "number"
+                , step stepvalue
+                , Attrs.min "0"
                 , onInput message
                 ]
                 []
