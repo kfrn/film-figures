@@ -148,14 +148,14 @@ makePanel model control =
                             getDisplayValue model.duration 2
 
                         labelText =
-                            translate model.language SecondsStr
+                            case model.speed of
+                                TwentyFourFPS ->
+                                    "@24fps" -- TODO: temp. This will later become a selectable option.
                     in
                     if inFocus control then
                         makeInputSection duration UpdateDuration labelText
                     else
-                        div [ class "field is-horizontal" ]
-                            [ div [ class "field-label is-normal param-centered" ] [ b [] [ text <| formatDuration model.duration ] ]
-                            ]
+                        makeInfoSection control model.controlInFocus (formatDuration model.duration) labelText
 
                 FrameCountControl ->
                     let

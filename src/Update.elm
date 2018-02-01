@@ -36,7 +36,7 @@ update msg model =
                 FootageControl ->
                     let
                         ( dur, fc ) =
-                            Calculate.fromFootage filmGauge model.footage
+                            Calculate.fromFootage model.speed filmGauge model.footage
 
                         newModel =
                             { model | gauge = filmGauge, duration = dur, frameCount = fc, footage = model.footage }
@@ -46,7 +46,7 @@ update msg model =
                 DurationControl ->
                     let
                         ( fc, ft ) =
-                            Calculate.fromDuration filmGauge model.duration
+                            Calculate.fromDuration model.speed filmGauge model.duration
 
                         newModel =
                             { model | gauge = filmGauge, duration = model.duration, frameCount = fc, footage = ft }
@@ -56,7 +56,7 @@ update msg model =
                 FrameCountControl ->
                     let
                         ( dur, ft ) =
-                            Calculate.fromFrameCount filmGauge model.frameCount
+                            Calculate.fromFrameCount model.speed filmGauge model.frameCount
 
                         newModel =
                             { model | gauge = filmGauge, duration = dur, frameCount = model.frameCount, footage = ft }
@@ -75,7 +75,7 @@ update msg model =
                 Ok ft ->
                     let
                         ( dur, fc ) =
-                            Calculate.fromFootage model.gauge ft
+                            Calculate.fromFootage model.speed model.gauge ft
 
                         newModel =
                             { model | duration = dur, frameCount = fc, footage = ft }
@@ -90,7 +90,7 @@ update msg model =
                 Ok dur ->
                     let
                         ( fc, ft ) =
-                            Calculate.fromDuration model.gauge dur
+                            Calculate.fromDuration model.speed model.gauge dur
 
                         newModel =
                             { model | duration = dur, frameCount = fc, footage = ft }
@@ -105,7 +105,7 @@ update msg model =
                 Ok fc ->
                     let
                         ( dur, ft ) =
-                            Calculate.fromFrameCount model.gauge fc
+                            Calculate.fromFrameCount model.speed model.gauge fc
 
                         newModel =
                             { model | duration = dur, frameCount = fc, footage = ft }

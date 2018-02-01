@@ -12,6 +12,7 @@ type alias Model =
     , duration : DurationInSeconds
     , frameCount : FrameCount
     , footage : FootageInFeet
+    , speed : Speed
     }
 
 
@@ -29,4 +30,5 @@ initialModel =
     , duration = 120
     , frameCount = 2880
     , footage = 180
+    , speed = TwentyFourFPS
     }

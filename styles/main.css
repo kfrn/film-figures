@@ -79,16 +79,10 @@ div.app-footer {
 
 .field-label {
   /* overriding Bulma */
-  margin: auto 0.5em auto 0.5em;
+  margin: auto;
 }
 
 .param-value {
   /* partially overriding Bulma's field-label */
   margin: auto 2.5em auto auto;
-}
-
-.param-centered {
-  /* partially overriding Bulma's field-label */
-  /*margin: auto auto auto 1em;*/
-  text-align: center;
 }

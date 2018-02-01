@@ -3,32 +3,34 @@ module Calculate exposing (..)
 import Types exposing (..)
 
 
-fromFootage : Gauge -> FootageInFeet -> ( DurationInSeconds, FrameCount )
-fromFootage gauge footage =
+fromFootage : Speed -> Gauge -> FootageInFeet -> ( DurationInSeconds, FrameCount )
+fromFootage speed gauge footage =
     let
         frames =
             footage * framesPerFoot gauge
     in
-    ( frames / speedInFPS, frames )
+    ( frames / speedInFPS speed, frames )
 
 
-fromFrameCount : Gauge -> FrameCount -> ( DurationInSeconds, FootageInFeet )
-fromFrameCount gauge framecount =
-    ( framecount / speedInFPS, framecount / framesPerFoot gauge )
+fromFrameCount : Speed -> Gauge -> FrameCount -> ( DurationInSeconds, FootageInFeet )
+fromFrameCount speed gauge framecount =
+    ( framecount / speedInFPS speed, framecount / framesPerFoot gauge )
 
 
-fromDuration : Gauge -> DurationInSeconds -> ( FrameCount, FootageInFeet )
-fromDuration gauge duration =
+fromDuration : Speed -> Gauge -> DurationInSeconds -> ( FrameCount, FootageInFeet )
+fromDuration speed gauge duration =
     let
         framecount =
-            duration * speedInFPS
+            duration * speedInFPS speed
     in
     ( framecount, framecount / framesPerFoot gauge )
 
 
-speedInFPS : Float
-speedInFPS =
-    24
+speedInFPS : Speed -> Float
+speedInFPS speed =
+    case speed of
+        TwentyFourFPS ->
+            24
 
 
 framesPerFoot : Gauge -> Float

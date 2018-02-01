@@ -46,3 +46,7 @@ type alias DurationInSeconds =
 
 type alias FrameCount =
     Float
+
+
+type Speed
+    = TwentyFourFPS
