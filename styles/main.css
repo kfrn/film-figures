@@ -86,3 +86,9 @@ div.app-footer {
   /* partially overriding Bulma's field-label */
   margin: auto 2.5em auto auto;
 }
+
+.param-centered {
+  /* partially overriding Bulma's field-label */
+  /*margin: auto auto auto 1em;*/
+  text-align: center;
+}
