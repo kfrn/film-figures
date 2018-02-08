@@ -39,5 +39,11 @@ framesPerFoot gauge =
         ThirtyFive ->
             16
 
+        TwentyEight ->
+            20.5
+
         Sixteen ->
+            40
+
+        NinePtFive ->
             40

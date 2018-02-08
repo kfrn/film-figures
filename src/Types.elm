@@ -13,12 +13,14 @@ allSystemsOfMeasurement =
 
 type Gauge
     = ThirtyFive
+    | TwentyEight
     | Sixteen
+    | NinePtFive
 
 
 allGauges : List Gauge
 allGauges =
-    [ ThirtyFive, Sixteen ]
+    [ ThirtyFive, TwentyEight, Sixteen, NinePtFive ]
 
 
 type Control

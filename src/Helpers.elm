@@ -11,8 +11,14 @@ displayNameForGauge gauge =
         ThirtyFive ->
             "35mm"
 
+        TwentyEight ->
+            "28mm"
+
         Sixteen ->
             "16mm"
+
+        NinePtFive ->
+            "9.5mm"
 
 
 getDisplayValue : Float -> Int -> String
