@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForGauge, formatDuration, getDisplayValue)
+import Helpers exposing (displayNameForGauge, feetToMetres, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
 import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, step, type_, value)
 import Html.Events exposing (onClick, onInput)
@@ -37,9 +37,7 @@ navbar language system =
                     [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
                     ]
                 ]
-
-            -- , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
-            , div [ class "navbar-end" ] [ languageControls language ]
+            , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
             ]
         ]
 
@@ -120,9 +118,18 @@ calculator model =
 
 makePanel : Model -> Control -> Html Msg
 makePanel model control =
+    -- TODO: unwieldy FN, needs refactor
     let
         footage =
-            getDisplayValue model.footage 2
+            case model.system of
+                Metric ->
+                    feetToMetres model.footage
+
+                Imperial ->
+                    model.footage
+
+        footageVal =
+            getDisplayValue footage 2
 
         frameCount =
             getDisplayValue model.frameCount 1
@@ -134,13 +141,21 @@ makePanel model control =
             case control of
                 FootageControl ->
                     let
+                        nameStr =
+                            case model.system of
+                                Metric ->
+                                    MetresStr
+
+                                Imperial ->
+                                    FeetStr
+
                         labelText =
-                            translate model.language FeetStr
+                            translate model.language nameStr
                     in
                     if inFocus control then
-                        makeInputSection footage UpdateFootage labelText
+                        makeInputSection footageVal UpdateFootage labelText
                     else
-                        makeInfoSection control model.controlInFocus footage labelText
+                        makeInfoSection control model.controlInFocus footageVal labelText
 
                 DurationControl ->
                     let
