@@ -138,14 +138,14 @@ makePanel model control =
                             translate model.language FeetStr
                     in
                     if inFocus control then
-                        makeInputSection footage UpdateFootage labelText
+                        makeInputSection control footage UpdateFootage labelText
                     else
                         makeInfoSection control model.controlInFocus footage labelText
 
                 DurationControl ->
                     let
                         duration =
-                            getDisplayValue model.duration 2
+                            formatDuration model.duration
 
                         labelText =
                             case model.speed of
@@ -153,7 +153,7 @@ makePanel model control =
                                     "@24fps" -- TODO: temp. This will later become a selectable option.
                     in
                     if inFocus control then
-                        makeInputSection duration UpdateDuration labelText
+                        makeInputSection control duration UpdateDuration labelText
                     else
                         makeInfoSection control model.controlInFocus (formatDuration model.duration) labelText
 
@@ -163,7 +163,7 @@ makePanel model control =
                             translate model.language FramesStr
                     in
                     if inFocus control then
-                        makeInputSection frameCount UpdateFrameCount labelText
+                        makeInputSection control frameCount UpdateFrameCount labelText
                     else
                         makeInfoSection control model.controlInFocus frameCount labelText
     in
@@ -179,14 +179,23 @@ makePanel model control =
         [ panel ]
 
 
-makeInputSection : String -> (String -> Msg) -> String -> Html Msg
-makeInputSection paramValue message labelText =
+makeInputSection : Control -> String -> (String -> Msg) -> String -> Html Msg
+makeInputSection control paramValue message labelText =
+    let
+        inputType =
+            case control of
+                DurationControl ->
+                    "text"
+
+                _ ->
+                    "number"
+    in
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
-                , type_ "number"
+                , type_ inputType
                 , Attr.min "0"
                 , step "0.01"
                 , onInput message
