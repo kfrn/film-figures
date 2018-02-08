@@ -2,7 +2,7 @@ module View exposing (view)
 
 import Helpers exposing (displayNameForGauge, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes exposing (attribute, class, classList, id, placeholder, value)
+import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, step, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
@@ -186,6 +186,9 @@ makeInputSection paramValue message labelText =
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
+                , type_ "number"
+                , Attr.min "0"
+                , step "0.01"
                 , onInput message
                 ]
                 []

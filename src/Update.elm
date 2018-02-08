@@ -75,10 +75,10 @@ update msg model =
                 Ok ft ->
                     let
                         ( dur, fc ) =
-                            Calculate.fromFootage model.speed model.gauge ft
+                            Calculate.fromFootage model.speed model.gauge (abs ft)
 
                         newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
+                            { model | duration = dur, frameCount = fc, footage = abs ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -90,10 +90,10 @@ update msg model =
                 Ok dur ->
                     let
                         ( fc, ft ) =
-                            Calculate.fromDuration model.speed model.gauge dur
+                            Calculate.fromDuration model.speed model.gauge (abs dur)
 
                         newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
+                            { model | duration = abs dur, frameCount = fc, footage = ft }
                     in
                     ( newModel, Cmd.none )
 
@@ -105,10 +105,10 @@ update msg model =
                 Ok fc ->
                     let
                         ( dur, ft ) =
-                            Calculate.fromFrameCount model.speed model.gauge fc
+                            Calculate.fromFrameCount model.speed model.gauge (abs fc)
 
                         newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
+                            { model | duration = dur, frameCount = abs fc, footage = ft }
                     in
                     ( newModel, Cmd.none )
 

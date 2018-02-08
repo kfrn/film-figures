@@ -86,3 +86,15 @@ div.app-footer {
   /* partially overriding Bulma's field-label */
   margin: auto 2.5em auto auto;
 }
+
+/*------- Hide HTML5 number input stepper -------*/
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
