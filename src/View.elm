@@ -118,7 +118,35 @@ calculator model =
 
 makePanel : Model -> Control -> Html Msg
 makePanel model control =
-    -- TODO: unwieldy FN, needs refactor
+    let
+        inFocus control =
+            model.controlInFocus == control
+
+        panel =
+            case control of
+                FootageControl ->
+                    createFootageControlPanel model control (inFocus control)
+
+                DurationControl ->
+                    createDurationControlPanel model control (inFocus control)
+
+                FrameCountControl ->
+                    createFrameCountControlPanel model control (inFocus control)
+    in
+    div
+        [ classList
+            [ ( "column", True )
+            , ( "control-panel", True )
+            , ( "control-focused", control == model.controlInFocus )
+            , ( "control-unfocused", control /= model.controlInFocus )
+            ]
+        , onClick <| ChangeControlInFocus control
+        ]
+        [ panel ]
+
+
+createFootageControlPanel : Model -> Control -> Bool -> Html Msg
+createFootageControlPanel model currentControl inFocus =
     let
         footage =
             case model.system of
@@ -131,67 +159,54 @@ makePanel model control =
         footageVal =
             getDisplayValue footage 2
 
+        nameStr =
+            case model.system of
+                Metric ->
+                    MetresStr
+
+                Imperial ->
+                    FeetStr
+
+        labelText =
+            translate model.language nameStr
+    in
+    if inFocus then
+        makeInputSection footageVal UpdateFootage labelText
+    else
+        makeInfoSection footageVal labelText
+
+
+createDurationControlPanel : Model -> Control -> Bool -> Html Msg
+createDurationControlPanel model currentControl inFocus =
+    let
+        duration =
+            getDisplayValue model.duration 2
+
+        labelText =
+            case model.speed of
+                -- TODO: temp. This will later become a selectable option.
+                TwentyFourFPS ->
+                    "@24fps"
+    in
+    if inFocus then
+        makeInputSection duration UpdateDuration labelText
+    else
+        makeInfoSection (formatDuration model.duration) labelText
+
+
+createFrameCountControlPanel : Model -> Control -> Bool -> Html Msg
+createFrameCountControlPanel model currentControl inFocus =
+    let
         frameCount =
             getDisplayValue model.frameCount 1
 
-        inFocus control =
-            model.controlInFocus == control
-
-        panel =
-            case control of
-                FootageControl ->
-                    let
-                        nameStr =
-                            case model.system of
-                                Metric ->
-                                    MetresStr
-
-                                Imperial ->
-                                    FeetStr
-
-                        labelText =
-                            translate model.language nameStr
-                    in
-                    if inFocus control then
-                        makeInputSection footageVal UpdateFootage labelText
-                    else
-                        makeInfoSection control model.controlInFocus footageVal labelText
-
-                DurationControl ->
-                    let
-                        duration =
-                            getDisplayValue model.duration 2
-
-                        labelText =
-                            case model.speed of
-                                TwentyFourFPS ->
-                                    "@24fps" -- TODO: temp. This will later become a selectable option.
-                    in
-                    if inFocus control then
-                        makeInputSection duration UpdateDuration labelText
-                    else
-                        makeInfoSection control model.controlInFocus (formatDuration model.duration) labelText
-
-                FrameCountControl ->
-                    let
-                        labelText =
-                            translate model.language FramesStr
-                    in
-                    if inFocus control then
-                        makeInputSection frameCount UpdateFrameCount labelText
-                    else
-                        makeInfoSection control model.controlInFocus frameCount labelText
+        labelText =
+            translate model.language FramesStr
     in
-    div
-        [ classList
-            [ ( "column", True )
-            , ( "control-panel", True )
-            , ( "control-focused", control == model.controlInFocus )
-            , ( "control-unfocused", control /= model.controlInFocus )
-            ]
-        , onClick <| ChangeControlInFocus control
-        ]
-        [ panel ]
+    if inFocus then
+        makeInputSection frameCount UpdateFrameCount labelText
+    else
+        makeInfoSection frameCount labelText
 
 
 makeInputSection : String -> (String -> Msg) -> String -> Html Msg
@@ -214,11 +229,11 @@ makeInputSection paramValue message labelText =
         ]
 
 
-makeInfoSection : Control -> ControlInFocus -> String -> String -> Html Msg
-makeInfoSection control controlInFocus paramValue labelText =
+makeInfoSection : String -> String -> Html Msg
+makeInfoSection paramValue labelText =
     div [ class "field is-horizontal" ]
         [ div [ class "field-label param-value is-normal" ] [ b [] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
-            [ label [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
+            [ label [] [ text labelText ]
             ]
         ]
