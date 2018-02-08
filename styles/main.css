@@ -61,7 +61,7 @@ div.app-footer {
 }
 
 .calculator input {
-  width: 80px;
+  width: 100px;
 }
 
 .control-panel {
@@ -90,11 +90,14 @@ div.app-footer {
 /*------- Hide HTML5 number input stepper -------*/
 
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="time"]::-webkit-outer-spin-button,
+input[type="time"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
+input[type="number"],
+input[type="time"] {
   -moz-appearance: textfield;
 }
