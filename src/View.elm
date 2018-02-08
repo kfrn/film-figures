@@ -138,7 +138,7 @@ makePanel model control =
                             translate model.language FeetStr
                     in
                     if inFocus control then
-                        makeInputSection footage UpdateFootage labelText
+                        makeInputSection control footage UpdateFootage labelText
                     else
                         makeInfoSection control model.controlInFocus footage labelText
 
@@ -153,7 +153,7 @@ makePanel model control =
                                     "@24fps" -- TODO: temp. This will later become a selectable option.
                     in
                     if inFocus control then
-                        makeInputSection duration UpdateDuration labelText
+                        makeInputSection control duration UpdateDuration labelText
                     else
                         makeInfoSection control model.controlInFocus (formatDuration model.duration) labelText
 
@@ -163,7 +163,7 @@ makePanel model control =
                             translate model.language FramesStr
                     in
                     if inFocus control then
-                        makeInputSection frameCount UpdateFrameCount labelText
+                        makeInputSection control frameCount UpdateFrameCount labelText
                     else
                         makeInfoSection control model.controlInFocus frameCount labelText
     in
@@ -179,14 +179,14 @@ makePanel model control =
         [ panel ]
 
 
-makeInputSection : String -> (String -> Msg) -> String -> Html Msg
-makeInputSection paramValue message labelText =
+makeInputSection : Control -> String -> (Float -> Msg) -> String -> Html Msg
+makeInputSection control paramValue message labelText =
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
-                , onInput message
+                , onInput (validateInput control message)
                 ]
                 []
             ]
@@ -194,6 +194,23 @@ makeInputSection paramValue message labelText =
             [ label [ classList [ ( "label", True ) ] ] [ text labelText ]
             ]
         ]
+
+
+validateInput : Control -> (Float -> Msg) -> String -> Msg
+validateInput control message inputValue =
+    let
+        checkNotNegative float =
+            if float == abs float then
+                message float
+            else
+                Update.NoOp
+    in
+    case String.toFloat inputValue of
+        Ok float ->
+            checkNotNegative float
+
+        Err e ->
+            Update.NoOp
 
 
 makeInfoSection : Control -> ControlInFocus -> String -> String -> Html Msg

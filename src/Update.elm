@@ -11,9 +11,9 @@ type Msg
     | ChangeSystemOfMeasurement SystemOfMeasurement
     | ChangeGauge Gauge
     | ChangeControlInFocus Control
-    | UpdateFootage String
-    | UpdateDuration String
-    | UpdateFrameCount String
+    | UpdateFootage FootageInFeet
+    | UpdateDuration DurationInSeconds
+    | UpdateFrameCount FrameCount
     | NoOp
 
 
@@ -71,49 +71,34 @@ update msg model =
             ( { newModel | controlInFocus = control }, Cmd.none )
 
         UpdateFootage footage ->
-            case String.toFloat footage of
-                Ok ft ->
-                    let
-                        ( dur, fc ) =
-                            Calculate.fromFootage model.speed model.gauge ft
+            let
+                ( dur, fc ) =
+                    Calculate.fromFootage model.speed model.gauge footage
 
-                        newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
-                    in
-                    ( newModel, Cmd.none )
-
-                Err e ->
-                    ( model, Cmd.none )
+                newModel =
+                    { model | duration = dur, frameCount = fc, footage = footage }
+            in
+            ( newModel, Cmd.none )
 
         UpdateDuration duration ->
-            case String.toFloat duration of
-                Ok dur ->
-                    let
-                        ( fc, ft ) =
-                            Calculate.fromDuration model.speed model.gauge dur
+            let
+                ( fc, ft ) =
+                    Calculate.fromDuration model.speed model.gauge duration
 
-                        newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
-                    in
-                    ( newModel, Cmd.none )
-
-                Err e ->
-                    ( model, Cmd.none )
+                newModel =
+                    { model | duration = duration, frameCount = fc, footage = ft }
+            in
+            ( newModel, Cmd.none )
 
         UpdateFrameCount framecount ->
-            case String.toFloat framecount of
-                Ok fc ->
-                    let
-                        ( dur, ft ) =
-                            Calculate.fromFrameCount model.speed model.gauge fc
+            let
+                ( dur, ft ) =
+                    Calculate.fromFrameCount model.speed model.gauge framecount
 
-                        newModel =
-                            { model | duration = dur, frameCount = fc, footage = ft }
-                    in
-                    ( newModel, Cmd.none )
-
-                Err e ->
-                    ( model, Cmd.none )
+                newModel =
+                    { model | duration = dur, frameCount = framecount, footage = ft }
+            in
+            ( newModel, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
