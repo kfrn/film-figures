@@ -2,7 +2,7 @@ module View exposing (view)
 
 import Helpers exposing (displayNameForGauge, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, step, type_, value)
+import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, step, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
@@ -138,14 +138,14 @@ makePanel model control =
                             translate model.language FeetStr
                     in
                     if inFocus control then
-                        makeInputSection footage UpdateFootage labelText
+                        makeInputSection control footage UpdateFootage labelText
                     else
                         makeInfoSection control model.controlInFocus footage labelText
 
                 DurationControl ->
                     let
                         duration =
-                            getDisplayValue model.duration 2
+                            formatDuration model.duration
 
                         labelText =
                             case model.speed of
@@ -153,9 +153,9 @@ makePanel model control =
                                     "@24fps" -- TODO: temp. This will later become a selectable option.
                     in
                     if inFocus control then
-                        makeInputSection duration UpdateDuration labelText
+                        makeInputSection control duration UpdateDuration labelText
                     else
-                        makeInfoSection control model.controlInFocus (formatDuration model.duration) labelText
+                        makeInfoSection control model.controlInFocus duration labelText
 
                 FrameCountControl ->
                     let
@@ -163,7 +163,7 @@ makePanel model control =
                             translate model.language FramesStr
                     in
                     if inFocus control then
-                        makeInputSection frameCount UpdateFrameCount labelText
+                        makeInputSection control frameCount UpdateFrameCount labelText
                     else
                         makeInfoSection control model.controlInFocus frameCount labelText
     in
@@ -179,16 +179,25 @@ makePanel model control =
         [ panel ]
 
 
-makeInputSection : String -> (String -> Msg) -> String -> Html Msg
-makeInputSection paramValue message labelText =
+makeInputSection : Control -> String -> (String -> Msg) -> String -> Html Msg
+makeInputSection control paramValue message labelText =
+    let
+        ( inputType, stepVal ) =
+            case control of
+                DurationControl ->
+                    ( "time", "1" )
+
+                _ ->
+                    ( "number", "0.01" )
+    in
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
-                , type_ "number"
-                , Attr.min "0"
-                , step "0.01"
+                , type_ inputType
+                , step stepVal
+                , required True
                 , onInput message
                 ]
                 []
