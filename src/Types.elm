@@ -42,6 +42,10 @@ type alias FootageInFeet =
     Float
 
 
+type alias FootageInMetres =
+    Float
+
+
 type alias DurationInSeconds =
     Float
 

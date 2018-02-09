@@ -18,6 +18,7 @@ type AppString
     | FramesStr
     | GaugeStr
     | ImperialStr
+    | MetresStr
     | MetricStr
     | SecondsStr
     | SetOptionStr
@@ -57,6 +58,12 @@ translate language appString =
                     { en = "imperial"
                     , fr = "impérial"
                     , it = "imperiale"
+                    }
+
+                MetresStr ->
+                    { en = "metres"
+                    , fr = "métres"
+                    , it = "metri"
                     }
 
                 MetricStr ->

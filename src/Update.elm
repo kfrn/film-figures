@@ -1,6 +1,7 @@
 module Update exposing (Msg(..), update)
 
 import Calculate
+import Helpers exposing (metresToFeet)
 import Model exposing (Model)
 import Translate exposing (Language(..))
 import Types exposing (..)
@@ -74,11 +75,19 @@ update msg model =
             case String.toFloat footage of
                 Ok ft ->
                     let
+                        footage =
+                            case model.system of
+                                Imperial ->
+                                    abs ft
+
+                                Metric ->
+                                    metresToFeet <| abs ft
+
                         ( dur, fc ) =
-                            Calculate.fromFootage model.speed model.gauge (abs ft)
+                            Calculate.fromFootage model.speed model.gauge footage
 
                         newModel =
-                            { model | duration = dur, frameCount = fc, footage = abs ft }
+                            { model | duration = dur, frameCount = fc, footage = footage }
                     in
                     ( newModel, Cmd.none )
 
