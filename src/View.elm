@@ -3,7 +3,8 @@ module View exposing (view)
 import Helpers exposing (displayNameForGauge, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
 import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, step, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onClick, onInput, onWithOptions)
+import Json.Decode as Decode
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
 import Translate exposing (AppString(..), Language(..), allLanguages, translate)
@@ -211,8 +212,23 @@ makeInputSection control paramValue message labelText =
 makeInfoSection : Control -> ControlInFocus -> String -> String -> Html Msg
 makeInfoSection control controlInFocus paramValue labelText =
     div [ class "field is-horizontal" ]
-        [ div [ class "field-label param-value is-normal" ] [ b [] [ text paramValue ] ]
+        [ div
+            [ class "field-label param-value is-normal"
+            , onClickParamValue Update.NoOp
+            ]
+            [ b [] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
             [ label [ classList [ ( "label", control == controlInFocus ) ] ] [ text labelText ]
             ]
         ]
+
+
+onClickParamValue : Msg -> Html.Attribute Msg
+onClickParamValue msg =
+    let
+        options =
+            { stopPropagation = True
+            , preventDefault = False
+            }
+    in
+    onWithOptions "click" options (Decode.succeed msg)
