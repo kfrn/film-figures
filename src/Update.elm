@@ -95,19 +95,29 @@ update msg model =
                     ( model, Cmd.none )
 
         UpdateDuration duration ->
-            case String.toFloat duration of
-                Ok dur ->
-                    let
-                        ( fc, ft ) =
-                            Calculate.fromDuration model.speed model.gauge (abs dur)
+            let
+                numStrings =
+                    String.split ":" duration
+            in
+            if List.length numStrings == 3 then
+                case List.map String.toInt numStrings of
+                    [ Ok hrs, Ok mins, Ok secs ] ->
+                        let
+                            totalSeconds =
+                                toFloat <| secs + (mins * 60) + (hrs * 3600)
 
-                        newModel =
-                            { model | duration = abs dur, frameCount = fc, footage = ft }
-                    in
-                    ( newModel, Cmd.none )
+                            ( fc, ft ) =
+                                Calculate.fromDuration model.speed model.gauge totalSeconds
 
-                Err e ->
-                    ( model, Cmd.none )
+                            newModel =
+                                { model | duration = totalSeconds, frameCount = fc, footage = ft }
+                        in
+                        ( newModel, Cmd.none )
+
+                    _ ->
+                        ( model, Cmd.none )
+            else
+                ( model, Cmd.none )
 
         UpdateFrameCount framecount ->
             case String.toFloat framecount of

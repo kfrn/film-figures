@@ -2,8 +2,9 @@ module View exposing (view)
 
 import Helpers exposing (displayNameForGauge, feetToMetres, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, step, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, step, type_, value)
+import Html.Events exposing (onClick, onInput, onWithOptions)
+import Json.Decode as Decode
 import Links exposing (LinkName(..), link)
 import Model exposing (Model)
 import Translate exposing (AppString(..), Language(..), allLanguages, translate)
@@ -171,7 +172,7 @@ createFootageControlPanel model currentControl inFocus =
             translate model.language nameStr
     in
     if inFocus then
-        makeInputSection footageVal UpdateFootage labelText
+        makeInputSection currentControl footageVal UpdateFootage labelText
     else
         makeInfoSection footageVal labelText
 
@@ -189,7 +190,7 @@ createDurationControlPanel model currentControl inFocus =
                     "@24fps"
     in
     if inFocus then
-        makeInputSection duration UpdateDuration labelText
+        makeInputSection currentControl duration UpdateDuration labelText
     else
         makeInfoSection (formatDuration model.duration) labelText
 
@@ -204,21 +205,30 @@ createFrameCountControlPanel model currentControl inFocus =
             translate model.language FramesStr
     in
     if inFocus then
-        makeInputSection frameCount UpdateFrameCount labelText
+        makeInputSection currentControl frameCount UpdateFrameCount labelText
     else
         makeInfoSection frameCount labelText
 
 
-makeInputSection : String -> (String -> Msg) -> String -> Html Msg
-makeInputSection paramValue message labelText =
+makeInputSection : Control -> String -> (String -> Msg) -> String -> Html Msg
+makeInputSection control paramValue message labelText =
+    let
+        ( inputType, stepVal ) =
+            case control of
+                DurationControl ->
+                    ( "time", "1" )
+
+                _ ->
+                    ( "number", "0.01" )
+    in
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
                 [ classList [ ( "input", True ) ]
                 , placeholder paramValue
-                , type_ "number"
-                , Attr.min "0"
-                , step "0.01"
+                , type_ inputType
+                , step stepVal
+                , required True
                 , onInput message
                 ]
                 []
@@ -232,8 +242,23 @@ makeInputSection paramValue message labelText =
 makeInfoSection : String -> String -> Html Msg
 makeInfoSection paramValue labelText =
     div [ class "field is-horizontal" ]
-        [ div [ class "field-label param-value is-normal" ] [ b [] [ text paramValue ] ]
+        [ div
+            [ class "field-label param-value is-normal"
+            , onClickParamValue Update.NoOp
+            ]
+            [ b [] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
             [ label [] [ text labelText ]
             ]
         ]
+
+
+onClickParamValue : Msg -> Html.Attribute Msg
+onClickParamValue msg =
+    let
+        options =
+            { stopPropagation = True
+            , preventDefault = False
+            }
+    in
+    onWithOptions "click" options (Decode.succeed msg)
