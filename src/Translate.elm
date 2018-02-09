@@ -31,9 +31,9 @@ translate language appString =
         translationSet =
             case appString of
                 DevelopedByStr ->
-                    { en = "Web app by Katherine Frances Nagels"
-                    , fr = "Application web par Katherine Frances Nagels"
-                    , it = "Applicazione web di Katherine Frances Nagels"
+                    { en = "Web app by K F Nagels"
+                    , fr = "Application web par K F Nagels"
+                    , it = "Applicazione web di K F Nagels"
                     }
 
                 FeetStr ->

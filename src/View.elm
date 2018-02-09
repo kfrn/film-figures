@@ -243,10 +243,8 @@ makeInfoSection : String -> String -> Html Msg
 makeInfoSection paramValue labelText =
     div [ class "field is-horizontal" ]
         [ div
-            [ class "field-label param-value is-normal"
-            , onClickParamValue Update.NoOp
-            ]
-            [ b [] [ text paramValue ] ]
+            [ class "field-label param-value is-normal" ]
+            [ b [ onClickParamValue Update.NoOp ] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
             [ label [] [ text labelText ]
             ]
