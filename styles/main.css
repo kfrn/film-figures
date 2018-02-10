@@ -17,6 +17,13 @@ body {
   }
 }
 
+@media (min-width: 1024px) {
+  #container {
+    margin: 1em auto;
+    max-width: 70%;
+  }
+}
+
 p {
   margin: 0 auto 0.5em auto;
 }
@@ -84,6 +91,11 @@ div.app-footer {
 
 .field-label {
   margin: 0.5em auto 0 auto; /* overriding Bulma */
+  text-align: center;
+}
+
+.field-label.is-normal {
+  padding-top: 0; /* overriding Bulma */
 }
 
 @media (min-width: 768px) {
