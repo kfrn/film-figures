@@ -62,7 +62,7 @@ translate language appString =
 
                 MetresStr ->
                     { en = "metres"
-                    , fr = "métres"
+                    , fr = "mètres"
                     , it = "metri"
                     }
 
