@@ -1,4 +1,4 @@
-# film figures
+# [film figures](https://kfrn.github.io/film-figures/)
 
 #### _calculate footage, duration, and frame count for analogue film_
 

@@ -69,9 +69,25 @@ nav.navbar {
   }
 }
 
-@media (max-width: 1200px) {
+.app-tagline {
+  display: none !important;
+}
+
+@media (min-width: 769px) {
   .app-tagline {
-    display: none;
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-tagline {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1216px) {
+  .app-tagline {
+    display: flex !important;
   }
 }
 
@@ -103,6 +119,7 @@ div.app-footer {
 }
 
 .calculator input::placeholder {
+  color: grey;
   text-align: center;
 }
 

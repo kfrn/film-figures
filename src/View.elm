@@ -31,6 +31,9 @@ navbar language system menuOpen =
                     , span [ class "app-title" ] [ text "film figures" ]
                     ]
                 ]
+            , div [ class "navbar-item app-tagline" ]
+                [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
+                ]
             , div
                 [ classList [ ( "button navbar-burger", True ), ( "is-active", menuOpen ) ]
                 , onClick ToggleMenu
@@ -42,12 +45,7 @@ navbar language system menuOpen =
             ]
         , div
             [ classList [ ( "navbar-menu", True ), ( "is-active", menuOpen ) ] ]
-            [ div [ class "navbar-start" ]
-                [ div [ class "navbar-item app-tagline" ]
-                    [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
-                    ]
-                ]
-            , div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
+            [ div [ class "navbar-end" ] [ systemControls language system, languageControls language ]
             ]
         ]
 
@@ -233,7 +231,7 @@ makeInputSection control paramValue message labelText =
     div [ class "field is-horizontal" ]
         [ div [ class "field-body" ]
             [ input
-                [ classList [ ( "input", True ) ]
+                [ classList [ ( "input", True ), ( "is-primary", True ) ]
                 , placeholder paramValue
                 , type_ inputType
                 , step stepVal
