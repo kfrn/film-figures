@@ -15,13 +15,13 @@ link name =
         Email ->
             a [ href "mailto:kfnagels@gmail.com" ]
                 [ span [ class "icon is-medium" ]
-                    [ i [ class "fa fa-envelope" ] []
+                    [ i [ class "fa fa-envelope has-text-primary" ] []
                     ]
                 ]
 
         SourceCode ->
             a [ href "https://github.com/kfrn/film-figures" ]
                 [ span [ class "icon" ]
-                    [ i [ class "fa fa-github" ] []
+                    [ i [ class "fa fa-github has-text-primary" ] []
                     ]
                 ]

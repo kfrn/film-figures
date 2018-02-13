@@ -15,14 +15,14 @@ import Update exposing (Msg(..))
 view : Model -> Html Msg
 view model =
     div [ id "container" ]
-        [ navbar model.language model.system
+        [ navbar model.language model.system model.dropdownMenuOpen
         , calculator model
         , footer model.language
         ]
 
 
-navbar : Language -> SystemOfMeasurement -> Html Msg
-navbar language system =
+navbar : Language -> SystemOfMeasurement -> Bool -> Html Msg
+navbar language system menuOpen =
     nav [ class "navbar", attribute "role" "navigation" ]
         [ div [ class "navbar-brand" ]
             [ div [ class "navbar-item" ]
@@ -31,10 +31,19 @@ navbar language system =
                     , span [ class "app-title" ] [ text "film figures" ]
                     ]
                 ]
+            , div
+                [ classList [ ( "button navbar-burger", True ), ( "is-active", menuOpen ) ]
+                , onClick ToggleMenu
+                ]
+                [ span [] []
+                , span [] []
+                , span [] []
+                ]
             ]
-        , div [ class "navbar-menu" ]
+        , div
+            [ classList [ ( "navbar-menu", True ), ( "is-active", menuOpen ) ] ]
             [ div [ class "navbar-start" ]
-                [ div [ class "navbar-item" ]
+                [ div [ class "navbar-item app-tagline" ]
                     [ p [ class "is-size-6" ] [ em [] [ text <| translate language TaglineStr ] ]
                     ]
                 ]

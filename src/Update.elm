@@ -15,6 +15,7 @@ type Msg
     | UpdateFootage String
     | UpdateDuration String
     | UpdateFrameCount String
+    | ToggleMenu
     | NoOp
 
 
@@ -133,6 +134,13 @@ update msg model =
 
                 Err e ->
                     ( model, Cmd.none )
+
+        ToggleMenu ->
+            let
+                open =
+                    model.dropdownMenuOpen
+            in
+            ( { model | dropdownMenuOpen = not open }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )

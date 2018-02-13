@@ -13,6 +13,7 @@ type alias Model =
     , frameCount : FrameCount
     , footage : FootageInFeet
     , speed : Speed
+    , dropdownMenuOpen : Bool
     }
 
 
@@ -31,4 +32,5 @@ initialModel =
     , frameCount = 2880
     , footage = 180
     , speed = TwentyFourFPS
+    , dropdownMenuOpen = False
     }

@@ -52,6 +52,29 @@ nav.navbar {
   padding-left: 0.5em;
 }
 
+@media screen and (max-width: 1023px) {
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .navbar-brand {
+    min-width: 100%;
+  }
+
+  .navbar-menu {
+    margin-left: auto;
+    min-width: 30%;
+    text-align: right;
+  }
+}
+
+@media (max-width: 1200px) {
+  .app-tagline {
+    display: none;
+  }
+}
+
 /*------- FOOTER -------*/
 
 div.app-footer {
@@ -92,6 +115,10 @@ div.app-footer {
 .field-label {
   margin: 0.5em auto 0 auto; /* overriding Bulma */
   text-align: center;
+}
+
+.field-label.is-normal {
+  padding-top: 0; /* overriding Bulma */
 }
 
 @media (min-width: 768px) {
