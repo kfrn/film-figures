@@ -1,12 +1,13 @@
 {
   "version": "1.0.0",
   "summary": "Calculate footage, duration, and frame count for analogue film.",
-  "repository": "https://github.com/user/project.git",
+  "repository": "https://github.com/kfrn/film-figures.git",
   "homepage": "https://kfrn.github.io/film-figures/",
   "license": "BSD3",
   "source-directories": ["src"],
   "exposed-modules": [],
   "dependencies": {
+    "elm-community/list-extra": "7.1.0 <= v < 8.0.0",
     "elm-community/maybe-extra": "4.0.0 <= v < 5.0.0",
     "elm-lang/core": "5.0.0 <= v < 6.0.0",
     "elm-lang/html": "2.0.0 <= v < 3.0.0",

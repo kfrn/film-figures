@@ -29,8 +29,20 @@ fromDuration speed gauge duration =
 speedInFPS : Speed -> Float
 speedInFPS speed =
     case speed of
+        SixteenFPS ->
+            16
+
+        EighteenFPS ->
+            18
+
         TwentyFourFPS ->
             24
+
+        TwentyFiveFPS ->
+            25
+
+        NtscFPS ->
+            30 / 1.001
 
 
 framesPerFoot : Gauge -> Float

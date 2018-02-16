@@ -13,10 +13,10 @@ allLanguages =
 
 
 type AppString
-    = DevelopedByStr
+    = ChooseStr
+    | DevelopedByStr
     | FeetStr
     | FramesStr
-    | GaugeStr
     | ImperialStr
     | MetresStr
     | MetricStr
@@ -30,6 +30,12 @@ translate language appString =
     let
         translationSet =
             case appString of
+                ChooseStr ->
+                    { en = "Choose a gauge and a speed:"
+                    , fr = "Choisir un format et une vitesse:"
+                    , it = "Scegliere un formato e una velocità:"
+                    }
+
                 DevelopedByStr ->
                     { en = "Web app by K F Nagels"
                     , fr = "Application web par K F Nagels"
@@ -46,12 +52,6 @@ translate language appString =
                     { en = "frames"
                     , fr = "cadres"
                     , it = "fotogramme"
-                    }
-
-                GaugeStr ->
-                    { en = "Choose a gauge:"
-                    , fr = "Choisir un format:"
-                    , it = "Scegliere un formato:"
                     }
 
                 ImperialStr ->

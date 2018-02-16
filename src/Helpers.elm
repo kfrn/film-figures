@@ -20,6 +20,25 @@ displayNameForGauge gauge =
             "9.5mm"
 
 
+displayNameForSpeed : Speed -> String
+displayNameForSpeed speed =
+    case speed of
+        SixteenFPS ->
+            "16fps"
+
+        EighteenFPS ->
+            "18fps"
+
+        TwentyFourFPS ->
+            "24fps"
+
+        TwentyFiveFPS ->
+            "25fps"
+
+        NtscFPS ->
+            "29.97fps"
+
+
 getDisplayValue : Float -> Int -> String
 getDisplayValue val dp =
     if isWholeFloat val then

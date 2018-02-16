@@ -12,6 +12,7 @@ type Msg
     | ChangeSystemOfMeasurement SystemOfMeasurement
     | ChangeGauge Gauge
     | ChangeControlInFocus Control
+    | ChangeSpeed Speed
     | UpdateFootage String
     | UpdateDuration String
     | UpdateFrameCount String
@@ -66,11 +67,17 @@ update msg model =
                     ( newModel, Cmd.none )
 
         ChangeControlInFocus control ->
+            ( { model | controlInFocus = control }, Cmd.none )
+
+        ChangeSpeed speed ->
             let
+                ( dur, fc ) =
+                    Calculate.fromFootage speed model.gauge model.footage
+
                 newModel =
-                    { model | controlInFocus = control }
+                    { model | duration = dur, frameCount = fc, speed = speed }
             in
-            ( { newModel | controlInFocus = control }, Cmd.none )
+            ( newModel, Cmd.none )
 
         UpdateFootage footage ->
             case String.toFloat footage of

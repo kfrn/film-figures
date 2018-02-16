@@ -55,4 +55,13 @@ type alias FrameCount =
 
 
 type Speed
-    = TwentyFourFPS
+    = SixteenFPS
+    | EighteenFPS
+    | TwentyFourFPS
+    | TwentyFiveFPS
+    | NtscFPS
+
+
+allSpeeds : List Speed
+allSpeeds =
+    [ SixteenFPS, EighteenFPS, TwentyFourFPS, TwentyFiveFPS, NtscFPS ]

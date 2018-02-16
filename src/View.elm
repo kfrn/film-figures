@@ -1,11 +1,12 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForGauge, feetToMetres, formatDuration, getDisplayValue)
-import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, p, span, text)
-import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, step, type_, value)
-import Html.Events exposing (onClick, onInput, onWithOptions)
-import Json.Decode as Decode
+import Helpers exposing (displayNameForGauge, displayNameForSpeed, feetToMetres, formatDuration, getDisplayValue)
+import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, option, p, select, span, text)
+import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, selected, step, type_, value)
+import Html.Events exposing (on, onClick, onInput, onWithOptions)
+import Json.Decode as Json
 import Links exposing (LinkName(..), link)
+import List.Extra as ListX
 import Model exposing (Model)
 import Translate exposing (AppString(..), Language(..), allLanguages, translate)
 import Types exposing (..)
@@ -112,9 +113,12 @@ calculator model =
                 [ text <| displayNameForGauge g ]
     in
     div [ id "calculator" ]
-        [ div [ id "gauge", class "calculator" ]
-            [ p [] [ text <| translate model.language GaugeStr ]
-            , div [] (List.map makeGaugeButton allGauges)
+        [ div [ id "basics", class "calculator" ]
+            [ p [] [ text <| translate model.language ChooseStr ]
+            , div [ id "options" ]
+                [ div [] (List.map makeGaugeButton allGauges)
+                , renderSelect TwentyFourFPS ChangeSpeed displayNameForSpeed allSpeeds
+                ]
             ]
         , div [ id "other-controls", class "calculator" ]
             [ p [] [ text <| translate model.language SetOptionStr ]
@@ -191,10 +195,7 @@ createDurationControlPanel model currentControl inFocus =
             getDisplayValue model.duration 2
 
         labelText =
-            case model.speed of
-                -- TODO: temp. This will later become a selectable option.
-                TwentyFourFPS ->
-                    "@24fps"
+            "@" ++ displayNameForSpeed model.speed
     in
     if inFocus then
         makeInputSection currentControl duration UpdateDuration labelText
@@ -266,4 +267,30 @@ onClickParamValue msg =
             , preventDefault = False
             }
     in
-    onWithOptions "click" options (Decode.succeed msg)
+    onWithOptions "click" options (Json.succeed msg)
+
+
+renderSelect : a -> (a -> Update.Msg) -> (a -> String) -> List a -> Html Update.Msg
+renderSelect selectedOption message makeOptionName options =
+    let
+        makeOptionTag opt =
+            option
+                [ selected <| selectedOption == opt ]
+                [ text <| makeOptionName opt ]
+
+        displayNameToMsg displayName =
+            case ListX.find (\item -> makeOptionName item == displayName) options of
+                Just opt ->
+                    message opt
+
+                Nothing ->
+                    Update.NoOp
+    in
+    div [ class "select" ]
+        [ select [ onChange displayNameToMsg ] (List.map makeOptionTag options)
+        ]
+
+
+onChange : (String -> msg) -> Html.Attribute msg
+onChange makeMessage =
+    on "change" (Json.map makeMessage Html.Events.targetValue)

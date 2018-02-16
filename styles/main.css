@@ -52,6 +52,16 @@ nav.navbar {
   padding-left: 0.5em;
 }
 
+.app-tagline {
+  display: none !important;
+}
+
+@media (min-width: 769px) {
+  .app-tagline {
+    display: flex !important;
+  }
+}
+
 @media screen and (max-width: 1023px) {
   .navbar {
     display: flex;
@@ -69,17 +79,7 @@ nav.navbar {
   }
 }
 
-.app-tagline {
-  display: none !important;
-}
-
-@media (min-width: 769px) {
-  .app-tagline {
-    display: flex !important;
-  }
-}
-
-@media (min-width: 1024px) {
+@media screen and (min-width: 1024px) {
   .app-tagline {
     display: none !important;
   }
@@ -108,6 +108,24 @@ div.app-footer {
 #calculator {
   text-align: center;
   margin: 0 auto;
+}
+
+.select:after {
+  border-color: #00d1b2 !important; /* overriding Bulma */
+}
+
+.select select:active {
+  border-color: #00d1b2 !important; /* overriding Bulma */
+}
+
+.select select:focus {
+  border-color: #00d1b2 !important; /* overriding Bulma */
+}
+
+@media (max-width: 767px) {
+  .select {
+    margin: 0.8em;
+  }
 }
 
 .calculator {
@@ -139,6 +157,13 @@ div.app-footer {
 }
 
 @media (min-width: 768px) {
+  #options {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    max-width: 70%;
+  }
+
   #other-controls {
     max-width: 70%;
     margin: 0 auto;
