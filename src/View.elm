@@ -252,22 +252,22 @@ makeInfoSection paramValue labelText =
     div [ class "field is-horizontal" ]
         [ div
             [ class "field-label is-normal" ]
-            [ b [ onClickParamValue Update.NoOp ] [ text paramValue ] ]
+            [ b [ stopPropagation "click" ] [ text paramValue ] ]
         , div [ class "field-label is-normal" ]
             [ label [] [ text labelText ]
             ]
         ]
 
 
-onClickParamValue : Msg -> Html.Attribute Msg
-onClickParamValue msg =
+stopPropagation : String -> Html.Attribute Msg
+stopPropagation action =
     let
         options =
             { stopPropagation = True
             , preventDefault = False
             }
     in
-    onWithOptions "click" options (Json.succeed msg)
+    onWithOptions action options (Json.succeed Update.NoOp)
 
 
 renderSelect : a -> (a -> Update.Msg) -> (a -> String) -> List a -> Html Update.Msg
