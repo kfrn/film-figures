@@ -110,6 +110,10 @@ div.app-footer {
   margin: 0 auto;
 }
 
+.select {
+  margin: 0.5em;
+}
+
 .select:after {
   border-color: #00d1b2 !important; /* overriding Bulma */
 }
@@ -120,12 +124,6 @@ div.app-footer {
 
 .select select:focus {
   border-color: #00d1b2 !important; /* overriding Bulma */
-}
-
-@media (max-width: 767px) {
-  .select {
-    margin: 0.8em;
-  }
 }
 
 .calculator {
@@ -159,7 +157,7 @@ div.app-footer {
 @media (min-width: 768px) {
   #options {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     margin: 0 auto;
     max-width: 70%;
   }

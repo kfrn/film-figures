@@ -101,22 +101,11 @@ footer language =
 
 calculator : Model -> Html Msg
 calculator model =
-    let
-        makeGaugeButton g =
-            button
-                [ classList
-                    [ ( "button", True )
-                    , ( "is-primary", g == model.gauge )
-                    ]
-                , onClick <| ChangeGauge g
-                ]
-                [ text <| displayNameForGauge g ]
-    in
     div [ id "calculator" ]
         [ div [ id "basics", class "calculator" ]
             [ p [] [ text <| translate model.language ChooseStr ]
             , div [ id "options" ]
-                [ div [] (List.map makeGaugeButton allGauges)
+                [ renderSelect Sixteen ChangeGauge displayNameForGauge allGauges
                 , renderSelect TwentyFourFPS ChangeSpeed displayNameForSpeed allSpeeds
                 ]
             ]

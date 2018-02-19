@@ -16,11 +16,13 @@ type Gauge
     | TwentyEight
     | Sixteen
     | NinePtFive
+    | SuperEight
+    | Eight
 
 
 allGauges : List Gauge
 allGauges =
-    [ ThirtyFive, TwentyEight, Sixteen, NinePtFive ]
+    [ ThirtyFive, TwentyEight, Sixteen, NinePtFive, SuperEight, Eight ]
 
 
 type Control
