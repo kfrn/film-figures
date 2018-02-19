@@ -83,6 +83,30 @@ all =
                     \_ ->
                         Expect.equal frameCount 2460
                 ]
+            , describe "gauge = Super-8, footage = 200', speed = 18fps" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage EighteenFPS SuperEight 200
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal duration 800
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal frameCount 14400
+                ]
+            , describe "gauge = 8mm, footage = 25', speed = 16fps" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage SixteenFPS Eight 25
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal duration 125
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal frameCount 2000
+                ]
             ]
         , describe "calculate duration, footage from frame count" <|
             [ describe "gauge = 35mm, frame count = 400, speed = 24fps" <|
@@ -135,6 +159,26 @@ all =
                 , test "footage is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 89.756)
                 ]
+            , describe "gauge = Super-8, frame count = 1840, speed = 18fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount EighteenFPS SuperEight 1840
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal (Round.round 3 duration) (toString 102.222)
+                , test "footage is correct" <|
+                    \_ -> Expect.equal (Round.round 3 footage) (toString 25.556)
+                ]
+            , describe "gauge = 8mm, frame count = 1840, speed = 16fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount SixteenFPS Eight 1840
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal duration 115
+                , test "footage is correct" <|
+                    \_ -> Expect.equal footage 23
+                ]
             ]
         , describe "calculate frame count, footage from duration" <|
             [ describe "gauge = 35mm, duration = 80 seconds, speed = 24fps" <|
@@ -186,6 +230,26 @@ all =
                     \_ -> Expect.equal frameCount 13824
                 , test "footage is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 674.341)
+                ]
+            , describe "gauge = Super-8, duration = 576 seconds, speed = 18fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration EighteenFPS SuperEight 576
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal frameCount 10368
+                , test "footage is correct" <|
+                    \_ -> Expect.equal footage 144
+                ]
+            , describe "gauge = 8mm, duration = 176 seconds, speed = 16fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration SixteenFPS Eight 176
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal frameCount 2816
+                , test "footage is correct" <|
+                    \_ -> Expect.equal footage 35.2
                 ]
             ]
         ]

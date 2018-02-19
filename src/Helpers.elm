@@ -19,6 +19,12 @@ displayNameForGauge gauge =
         NinePtFive ->
             "9.5mm"
 
+        SuperEight ->
+            "Super-8"
+
+        Eight ->
+            "8mm"
+
 
 displayNameForSpeed : Speed -> String
 displayNameForSpeed speed =

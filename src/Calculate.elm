@@ -59,3 +59,9 @@ framesPerFoot gauge =
 
         NinePtFive ->
             40
+
+        SuperEight ->
+            72
+
+        Eight ->
+            80
