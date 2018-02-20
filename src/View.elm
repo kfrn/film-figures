@@ -1,6 +1,7 @@
 module View exposing (view)
 
-import Helpers exposing (displayNameForGauge, displayNameForSpeed, feetToMetres, formatDuration, getDisplayValue)
+import Calculate exposing (feetToMetres)
+import Helpers exposing (displayNameForGauge, displayNameForSpeed, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, option, p, select, span, text)
 import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, selected, step, type_, value)
 import Html.Events exposing (on, onClick, onInput, onWithOptions)
@@ -149,16 +150,8 @@ makePanel model control =
 createFootageControlPanel : Model -> Control -> Bool -> Html Msg
 createFootageControlPanel model currentControl inFocus =
     let
-        footage =
-            case model.system of
-                Metric ->
-                    feetToMetres model.footage
-
-                Imperial ->
-                    model.footage
-
         footageVal =
-            getDisplayValue footage 2
+            getDisplayValue model.footage 2
 
         nameStr =
             case model.system of

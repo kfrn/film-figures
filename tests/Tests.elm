@@ -14,7 +14,7 @@ all =
             [ describe "gauge = 35mm, footage = 4', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage TwentyFourFPS ThirtyFive 4
+                        fromFootage Imperial TwentyFourFPS ThirtyFive 4
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -26,7 +26,7 @@ all =
             , describe "gauge = 35mm, footage = 576', speed = 25fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage TwentyFiveFPS ThirtyFive 576
+                        fromFootage Imperial TwentyFiveFPS ThirtyFive 576
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -38,7 +38,7 @@ all =
             , describe "gauge = 16mm, footage = 250', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage TwentyFourFPS Sixteen 250
+                        fromFootage Imperial TwentyFourFPS Sixteen 250
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -50,7 +50,7 @@ all =
             , describe "gauge = 9.5mm, footage = 250', speed = 16fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage SixteenFPS NinePtFive 250
+                        fromFootage Imperial SixteenFPS NinePtFive 250
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -62,7 +62,7 @@ all =
             , describe "gauge = 35mm, footage = 180', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage TwentyFourFPS ThirtyFive 180
+                        fromFootage Imperial TwentyFourFPS ThirtyFive 180
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -74,7 +74,7 @@ all =
             , describe "gauge = 28mm, footage = 120', speed = 18fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage EighteenFPS TwentyEight 120
+                        fromFootage Imperial EighteenFPS TwentyEight 120
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -86,7 +86,7 @@ all =
             , describe "gauge = Super-8, footage = 200', speed = 18fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage EighteenFPS SuperEight 200
+                        fromFootage Imperial EighteenFPS SuperEight 200
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -98,7 +98,7 @@ all =
             , describe "gauge = 8mm, footage = 25', speed = 16fps" <|
                 let
                     ( duration, frameCount ) =
-                        fromFootage SixteenFPS Eight 25
+                        fromFootage Imperial SixteenFPS Eight 25
                 in
                 [ test "duration is correct" <|
                     \_ ->
@@ -112,7 +112,7 @@ all =
             [ describe "gauge = 35mm, frame count = 400, speed = 24fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount TwentyFourFPS ThirtyFive 400
+                        fromFrameCount Imperial TwentyFourFPS ThirtyFive 400
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
@@ -122,7 +122,7 @@ all =
             , describe "gauge = 16mm, frame count = 400, speed = 24fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount TwentyFourFPS Sixteen 400
+                        fromFrameCount Imperial TwentyFourFPS Sixteen 400
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
@@ -132,7 +132,7 @@ all =
             , describe "gauge = 16mm, frame count = 1840, speed = 29.97fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount NtscFPS Sixteen 1840
+                        fromFrameCount Imperial NtscFPS Sixteen 1840
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal (Round.round 3 duration) (toString 61.395)
@@ -142,7 +142,7 @@ all =
             , describe "gauge = 9.5mm, frame count = 1840, speed = 16fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount SixteenFPS NinePtFive 1840
+                        fromFrameCount Imperial SixteenFPS NinePtFive 1840
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal duration 115
@@ -152,7 +152,7 @@ all =
             , describe "gauge = 28mm, frame count = 1840, speed = 24fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount TwentyFourFPS TwentyEight 1840
+                        fromFrameCount Imperial TwentyFourFPS TwentyEight 1840
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal (Round.round 3 duration) (toString 76.667)
@@ -162,7 +162,7 @@ all =
             , describe "gauge = Super-8, frame count = 1840, speed = 18fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount EighteenFPS SuperEight 1840
+                        fromFrameCount Imperial EighteenFPS SuperEight 1840
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal (Round.round 3 duration) (toString 102.222)
@@ -172,7 +172,7 @@ all =
             , describe "gauge = 8mm, frame count = 1840, speed = 16fps" <|
                 let
                     ( duration, footage ) =
-                        fromFrameCount SixteenFPS Eight 1840
+                        fromFrameCount Imperial SixteenFPS Eight 1840
                 in
                 [ test "duration is correct" <|
                     \_ -> Expect.equal duration 115
@@ -184,7 +184,7 @@ all =
             [ describe "gauge = 35mm, duration = 80 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration TwentyFourFPS ThirtyFive 80
+                        fromDuration Imperial TwentyFourFPS ThirtyFive 80
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 1920
@@ -194,7 +194,7 @@ all =
             , describe "gauge = 16mm, duration = 30 seconds, speed = 25fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration TwentyFiveFPS Sixteen 30
+                        fromDuration Imperial TwentyFiveFPS Sixteen 30
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 750
@@ -204,7 +204,7 @@ all =
             , describe "gauge = 16mm, duration = 576 seconds, speed = 29.97fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration NtscFPS Sixteen 576
+                        fromDuration Imperial NtscFPS Sixteen 576
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal (Round.round 2 frameCount) (toString 17262.74)
@@ -214,7 +214,7 @@ all =
             , describe "gauge = 9.5mm, duration = 576 seconds, speed = 16fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration SixteenFPS NinePtFive 576
+                        fromDuration Imperial SixteenFPS NinePtFive 576
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 9216
@@ -224,7 +224,7 @@ all =
             , describe "gauge = 28mm, duration = 576 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration TwentyFourFPS TwentyEight 576
+                        fromDuration Imperial TwentyFourFPS TwentyEight 576
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 13824
@@ -234,7 +234,7 @@ all =
             , describe "gauge = Super-8, duration = 576 seconds, speed = 18fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration EighteenFPS SuperEight 576
+                        fromDuration Imperial EighteenFPS SuperEight 576
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 10368
@@ -244,7 +244,7 @@ all =
             , describe "gauge = 8mm, duration = 176 seconds, speed = 16fps" <|
                 let
                     ( frameCount, footage ) =
-                        fromDuration SixteenFPS Eight 176
+                        fromDuration Imperial SixteenFPS Eight 176
                 in
                 [ test "frame count is correct" <|
                     \_ -> Expect.equal frameCount 2816
