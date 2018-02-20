@@ -14,10 +14,6 @@ If this calculator doesn't suit your needs, you may wish to consult [Kodak's Fil
 🇫🇷 Disponible aussi en français et italien!  
 🇮🇹 Disponibile anche in italiano e francese!
 
-### ⚠️ Please note ⚠️
-
-This project is not yet feature-complete - see the [github issues](https://github.com/kfrn/film-figures/issues).
-
 ### Background
 
 **film figures** is a sister project to [**reel time**](https://kfrn.github.io/reel-time), my open-reel audio duration calculator. Both projects are inspired by open-source preservation tools like [ffmprovisr](https://amiaopensource.github.io/ffmprovisr/) and [Cable Bible](https://amiaopensource.github.io/cable-bible/).
