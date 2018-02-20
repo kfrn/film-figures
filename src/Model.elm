@@ -25,13 +25,29 @@ init =
 
 initialModel : Model
 initialModel =
-    { system = Imperial
+    let
+        feet =
+            180
+
+        sys =
+            Imperial
+
+        speed =
+            TwentyFourFPS
+
+        gauge =
+            Sixteen
+
+        ( dur, frames ) =
+            Calculate.fromFootage sys speed gauge feet
+    in
+    { system = sys
     , language = EN
-    , gauge = ThirtyFive
+    , gauge = gauge
     , controlInFocus = FootageControl
-    , duration = 120
-    , frameCount = 2880
-    , footage = 180
-    , speed = TwentyFourFPS
+    , duration = dur
+    , frameCount = frames
+    , footage = feet
+    , speed = speed
     , dropdownMenuOpen = False
     }
