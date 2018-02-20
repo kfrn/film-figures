@@ -1,5 +1,6 @@
 module Model exposing (Model, init)
 
+import Calculate
 import Translate exposing (Language(..))
 import Types exposing (..)
 
@@ -11,7 +12,7 @@ type alias Model =
     , controlInFocus : Control
     , duration : DurationInSeconds
     , frameCount : FrameCount
-    , footage : FootageInFeet
+    , footage : Footage
     , speed : Speed
     , dropdownMenuOpen : Bool
     }

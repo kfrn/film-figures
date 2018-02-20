@@ -58,16 +58,6 @@ isWholeFloat num =
     num - (toFloat <| floor num) == 0
 
 
-feetToMetres : FootageInFeet -> FootageInMetres
-feetToMetres feet =
-    feet * 0.3048
-
-
-metresToFeet : FootageInMetres -> FootageInFeet
-metresToFeet metrage =
-    metrage / 0.3048
-
-
 formatDuration : DurationInSeconds -> String
 formatDuration totalSeconds =
     let

@@ -40,6 +40,10 @@ allControls =
     [ FootageControl, DurationControl, FrameCountControl ]
 
 
+type alias Footage =
+    Float
+
+
 type alias FootageInFeet =
     Float
 

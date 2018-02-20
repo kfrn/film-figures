@@ -3,27 +3,49 @@ module Calculate exposing (..)
 import Types exposing (..)
 
 
-fromFootage : Speed -> Gauge -> FootageInFeet -> ( DurationInSeconds, FrameCount )
-fromFootage speed gauge footage =
+fromFootage : SystemOfMeasurement -> Speed -> Gauge -> Footage -> ( DurationInSeconds, FrameCount )
+fromFootage system speed gauge footage =
     let
         frames =
-            footage * framesPerFoot gauge
+            case system of
+                Imperial ->
+                    footage * framesPerFoot gauge
+
+                Metric ->
+                    metresToFeet footage * framesPerFoot gauge
     in
     ( frames / speedInFPS speed, frames )
 
 
-fromFrameCount : Speed -> Gauge -> FrameCount -> ( DurationInSeconds, FootageInFeet )
-fromFrameCount speed gauge framecount =
-    ( framecount / speedInFPS speed, framecount / framesPerFoot gauge )
+fromFrameCount : SystemOfMeasurement -> Speed -> Gauge -> FrameCount -> ( DurationInSeconds, Footage )
+fromFrameCount system speed gauge framecount =
+    let
+        footage =
+            case system of
+                Imperial ->
+                    framecount / framesPerFoot gauge
+
+                Metric ->
+                    feetToMetres <| framecount / framesPerFoot gauge
+    in
+    ( framecount / speedInFPS speed, footage )
 
 
-fromDuration : Speed -> Gauge -> DurationInSeconds -> ( FrameCount, FootageInFeet )
-fromDuration speed gauge duration =
+fromDuration : SystemOfMeasurement -> Speed -> Gauge -> DurationInSeconds -> ( FrameCount, Footage )
+fromDuration system speed gauge duration =
     let
         framecount =
             duration * speedInFPS speed
+
+        footage =
+            case system of
+                Imperial ->
+                    framecount / framesPerFoot gauge
+
+                Metric ->
+                    feetToMetres <| framecount / framesPerFoot gauge
     in
-    ( framecount, framecount / framesPerFoot gauge )
+    ( framecount, footage )
 
 
 speedInFPS : Speed -> Float
@@ -65,3 +87,13 @@ framesPerFoot gauge =
 
         Eight ->
             80
+
+
+feetToMetres : FootageInFeet -> FootageInMetres
+feetToMetres feet =
+    feet * 0.3048
+
+
+metresToFeet : FootageInMetres -> FootageInFeet
+metresToFeet metres =
+    metres * 3.28
