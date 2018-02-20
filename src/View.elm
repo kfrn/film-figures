@@ -106,8 +106,8 @@ calculator model =
         [ div [ id "basics", class "calculator" ]
             [ p [] [ text <| translate model.language ChooseStr ]
             , div [ id "options" ]
-                [ renderSelect Sixteen ChangeGauge displayNameForGauge allGauges
-                , renderSelect TwentyFourFPS ChangeSpeed displayNameForSpeed allSpeeds
+                [ renderSelect model.gauge ChangeGauge displayNameForGauge allGauges
+                , renderSelect model.speed ChangeSpeed displayNameForSpeed allSpeeds
                 ]
             ]
         , div [ id "other-controls", class "calculator" ]
