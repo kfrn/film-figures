@@ -4,7 +4,7 @@
 
 ### About
 
-Choose a film gauge (options are 35mm, 28mm, 16mm, and 9.5mm) and set one of these three parameters: the footage (in feet or metres), the duration, or the framecount. The other two parameters will thereby be calculated.
+Choose a film gauge (options are 35mm, 28mm, 16mm, 9.5mm, Super-8, and 8mm) and set one of these three parameters: the footage (in feet or metres), the duration, or the framecount. The other two parameters will thereby be calculated.
 
 Other online film calculators exist, but I made this one because I wanted a cleaner UI - I am not fond of forms that include many input boxes, some of which are mutually exclusive.
 

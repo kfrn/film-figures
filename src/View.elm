@@ -3,7 +3,7 @@ module View exposing (view)
 import Calculate exposing (feetToMetres)
 import Helpers exposing (displayNameForGauge, displayNameForSpeed, formatDuration, getDisplayValue)
 import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, option, p, select, span, text)
-import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, selected, step, type_, value)
+import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, selected, step, type_)
 import Html.Events exposing (on, onClick, onInput, onWithOptions)
 import Json.Decode as Json
 import Links exposing (LinkName(..), link)

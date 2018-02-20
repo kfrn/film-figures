@@ -21,12 +21,7 @@ fromFrameCount : SystemOfMeasurement -> Speed -> Gauge -> FrameCount -> ( Durati
 fromFrameCount system speed gauge framecount =
     let
         footage =
-            case system of
-                Imperial ->
-                    framecount / framesPerFoot gauge
-
-                Metric ->
-                    feetToMetres <| framecount / framesPerFoot gauge
+            footageFromFrameCount framecount system gauge
     in
     ( framecount / speedInFPS speed, footage )
 
@@ -38,14 +33,19 @@ fromDuration system speed gauge duration =
             duration * speedInFPS speed
 
         footage =
-            case system of
-                Imperial ->
-                    framecount / framesPerFoot gauge
-
-                Metric ->
-                    feetToMetres <| framecount / framesPerFoot gauge
+            footageFromFrameCount framecount system gauge
     in
     ( framecount, footage )
+
+
+footageFromFrameCount : FrameCount -> SystemOfMeasurement -> Gauge -> Footage
+footageFromFrameCount frames system gauge =
+    case system of
+        Imperial ->
+            frames / framesPerFoot gauge
+
+        Metric ->
+            feetToMetres <| frames / framesPerFoot gauge
 
 
 speedInFPS : Speed -> Float

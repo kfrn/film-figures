@@ -44,14 +44,6 @@ type alias Footage =
     Float
 
 
-type alias FootageInFeet =
-    Float
-
-
-type alias FootageInMetres =
-    Float
-
-
 type alias DurationInSeconds =
     Float
 
@@ -71,3 +63,11 @@ type Speed
 allSpeeds : List Speed
 allSpeeds =
     [ SixteenFPS, EighteenFPS, TwentyFourFPS, TwentyFiveFPS, NtscFPS ]
+
+
+type alias FootageInFeet =
+    Float
+
+
+type alias FootageInMetres =
+    Float
