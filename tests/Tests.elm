@@ -10,7 +10,7 @@ import Types exposing (..)
 all : Test
 all =
     describe "Basic calculations"
-        [ describe "calculate duration, framecount from footage" <|
+        [ describe "calculate duration & framecount from footage" <|
             [ describe "gauge = 35mm, footage = 4', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
@@ -47,6 +47,30 @@ all =
                     \_ ->
                         Expect.equal frameCount 9216
                 ]
+            , describe "gauge = 35mm, footage = 180', speed = 24fps" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage Imperial TwentyFourFPS ThirtyFive 180
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal duration 120
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal frameCount 2880
+                ]
+            , describe "gauge = 28mm, footage = 120', speed = 18fps" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage Imperial EighteenFPS TwentyEight 120
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal (Round.round 3 duration) (toString 136.667)
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal frameCount 2460
+                ]
             , describe "gauge = 16mm, footage = 250', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
@@ -82,30 +106,6 @@ all =
                 , test "framecount is correct" <|
                     \_ ->
                         Expect.equal frameCount 15088
-                ]
-            , describe "gauge = 35mm, footage = 180', speed = 24fps" <|
-                let
-                    ( duration, frameCount ) =
-                        fromFootage Imperial TwentyFourFPS ThirtyFive 180
-                in
-                [ test "duration is correct" <|
-                    \_ ->
-                        Expect.equal duration 120
-                , test "framecount is correct" <|
-                    \_ ->
-                        Expect.equal frameCount 2880
-                ]
-            , describe "gauge = 28mm, footage = 120', speed = 18fps" <|
-                let
-                    ( duration, frameCount ) =
-                        fromFootage Imperial EighteenFPS TwentyEight 120
-                in
-                [ test "duration is correct" <|
-                    \_ ->
-                        Expect.equal (Round.round 3 duration) (toString 136.667)
-                , test "framecount is correct" <|
-                    \_ ->
-                        Expect.equal frameCount 2460
                 ]
             , describe "gauge = Super-8, footage = 200', speed = 18fps" <|
                 let
@@ -144,8 +144,8 @@ all =
                         Expect.equal frameCount 2000
                 ]
             ]
-        , describe "calculate duration, footage from frame count" <|
-            [ describe "duration, footage from gauge = 35mm, frame count = 400, speed = 24fps" <|
+        , describe "calculate duration & footage from frame count" <|
+            [ describe "duration & footage from gauge = 35mm, frame count = 400, speed = 24fps" <|
                 let
                     ( duration, footage ) =
                         fromFrameCount Imperial TwentyFourFPS ThirtyFive 400
@@ -155,47 +155,7 @@ all =
                 , test "footage (in feet) is correct" <|
                     \_ -> Expect.equal footage 25
                 ]
-            , describe "duration, footage from gauge = 16mm, frame count = 400, speed = 24fps" <|
-                let
-                    ( duration, footage ) =
-                        fromFrameCount Imperial TwentyFourFPS Sixteen 400
-                in
-                [ test "duration is correct" <|
-                    \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal footage 10
-                ]
-            , describe "duration, metrage from gauge = 16mm, frame count = 400, speed = 24fps" <|
-                let
-                    ( duration, footage ) =
-                        fromFrameCount Metric TwentyFourFPS Sixteen 400
-                in
-                [ test "duration is correct" <|
-                    \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
-                , test "footage (in metres) is correct" <|
-                    \_ -> Expect.equal (Round.round 3 footage) (toString 3.048)
-                ]
-            , describe "duration, footage from gauge = 16mm, frame count = 1840, speed = 29.97fps" <|
-                let
-                    ( duration, footage ) =
-                        fromFrameCount Imperial NtscFPS Sixteen 1840
-                in
-                [ test "duration is correct" <|
-                    \_ -> Expect.equal (Round.round 3 duration) (toString 61.395)
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal footage 46
-                ]
-            , describe "duration, footage from gauge = 9.5mm, frame count = 1840, speed = 16fps" <|
-                let
-                    ( duration, footage ) =
-                        fromFrameCount Imperial SixteenFPS NinePtFive 1840
-                in
-                [ test "duration is correct" <|
-                    \_ -> Expect.equal duration 115
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal footage 46
-                ]
-            , describe "duration, footage from gauge = 28mm, frame count = 1840, speed = 24fps" <|
+            , describe "duration & footage from gauge = 28mm, frame count = 1840, speed = 24fps" <|
                 let
                     ( duration, footage ) =
                         fromFrameCount Imperial TwentyFourFPS TwentyEight 1840
@@ -215,7 +175,47 @@ all =
                 , test "footage (in metres) is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 27.358)
                 ]
-            , describe "duration, footage from gauge = Super-8, frame count = 1840, speed = 18fps" <|
+            , describe "duration & footage from gauge = 16mm, frame count = 400, speed = 24fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount Imperial TwentyFourFPS Sixteen 400
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal footage 10
+                ]
+            , describe "duration, metrage from gauge = 16mm, frame count = 400, speed = 24fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount Metric TwentyFourFPS Sixteen 400
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal (Round.round 3 duration) (toString 16.667)
+                , test "footage (in metres) is correct" <|
+                    \_ -> Expect.equal (Round.round 3 footage) (toString 3.048)
+                ]
+            , describe "duration & footage from gauge = 16mm, frame count = 1840, speed = 29.97fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount Imperial NtscFPS Sixteen 1840
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal (Round.round 3 duration) (toString 61.395)
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal footage 46
+                ]
+            , describe "duration & footage from gauge = 9.5mm, frame count = 1840, speed = 16fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount Imperial SixteenFPS NinePtFive 1840
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal duration 115
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal footage 46
+                ]
+            , describe "duration & footage from gauge = Super-8, frame count = 1840, speed = 18fps" <|
                 let
                     ( duration, footage ) =
                         fromFrameCount Imperial EighteenFPS SuperEight 1840
@@ -225,7 +225,7 @@ all =
                 , test "footage (in feet) is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 25.556)
                 ]
-            , describe "duration, footage from gauge = 8mm, frame count = 1840, speed = 16fps" <|
+            , describe "duration & footage from gauge = 8mm, frame count = 1840, speed = 16fps" <|
                 let
                     ( duration, footage ) =
                         fromFrameCount Imperial SixteenFPS Eight 1840
@@ -246,8 +246,8 @@ all =
                     \_ -> Expect.equal (Round.round 2 footage) (toString 4.06)
                 ]
             ]
-        , describe "calculate frame count, footage from duration" <|
-            [ describe "frame count, footage from gauge = 35mm, duration = 80 seconds, speed = 24fps" <|
+        , describe "calculate frame count & footage from duration" <|
+            [ describe "frame count & footage from gauge = 35mm, duration = 80 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Imperial TwentyFourFPS ThirtyFive 80
@@ -257,7 +257,7 @@ all =
                 , test "footage (in feet) is correct" <|
                     \_ -> Expect.equal footage 120
                 ]
-            , describe "frame count, metrage from gauge = 35mm, duration = 120 seconds, speed = 24fps" <|
+            , describe "frame count & metrage from gauge = 35mm, duration = 120 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Metric TwentyFourFPS ThirtyFive 120
@@ -267,47 +267,7 @@ all =
                 , test "footage (in metres) is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 54.864)
                 ]
-            , describe "frame count, footage from gauge = 16mm, duration = 30 seconds, speed = 25fps" <|
-                let
-                    ( frameCount, footage ) =
-                        fromDuration Imperial TwentyFiveFPS Sixteen 30
-                in
-                [ test "frame count is correct" <|
-                    \_ -> Expect.equal frameCount 750
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal footage 18.75
-                ]
-            , describe "frame count, footage from gauge = 16mm, duration = 576 seconds, speed = 29.97fps" <|
-                let
-                    ( frameCount, footage ) =
-                        fromDuration Imperial NtscFPS Sixteen 576
-                in
-                [ test "frame count is correct" <|
-                    \_ -> Expect.equal (Round.round 2 frameCount) (toString 17262.74)
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal (Round.round 3 footage) (toString 431.568)
-                ]
-            , describe "frame count, metrage from gauge = 16mm, duration = 185 seconds, speed = 29.97fps" <|
-                let
-                    ( frameCount, footage ) =
-                        fromDuration Metric NtscFPS Sixteen 185
-                in
-                [ test "frame count is correct" <|
-                    \_ -> Expect.equal (Round.round 2 frameCount) (toString 5544.46)
-                , test "footage (in metres) is correct" <|
-                    \_ -> Expect.equal (Round.round 3 footage) (toString 42.249)
-                ]
-            , describe "frame count, footage from gauge = 9.5mm, duration = 576 seconds, speed = 16fps" <|
-                let
-                    ( frameCount, footage ) =
-                        fromDuration Imperial SixteenFPS NinePtFive 576
-                in
-                [ test "frame count is correct" <|
-                    \_ -> Expect.equal frameCount 9216
-                , test "footage (in feet) is correct" <|
-                    \_ -> Expect.equal footage 230.4
-                ]
-            , describe "frame count, footage from gauge = 28mm, duration = 576 seconds, speed = 24fps" <|
+            , describe "frame count & footage from gauge = 28mm, duration = 576 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Imperial TwentyFourFPS TwentyEight 576
@@ -317,7 +277,47 @@ all =
                 , test "footage (in feet) is correct" <|
                     \_ -> Expect.equal (Round.round 3 footage) (toString 674.341)
                 ]
-            , describe "frame count, footage from gauge = Super-8, duration = 576 seconds, speed = 18fps" <|
+            , describe "frame count & footage from gauge = 16mm, duration = 30 seconds, speed = 25fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration Imperial TwentyFiveFPS Sixteen 30
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal frameCount 750
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal footage 18.75
+                ]
+            , describe "frame count & footage from gauge = 16mm, duration = 576 seconds, speed = 29.97fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration Imperial NtscFPS Sixteen 576
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal (Round.round 2 frameCount) (toString 17262.74)
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal (Round.round 3 footage) (toString 431.568)
+                ]
+            , describe "frame count & metrage from gauge = 16mm, duration = 185 seconds, speed = 29.97fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration Metric NtscFPS Sixteen 185
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal (Round.round 2 frameCount) (toString 5544.46)
+                , test "footage (in metres) is correct" <|
+                    \_ -> Expect.equal (Round.round 3 footage) (toString 42.249)
+                ]
+            , describe "frame count & footage from gauge = 9.5mm, duration = 576 seconds, speed = 16fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration Imperial SixteenFPS NinePtFive 576
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal frameCount 9216
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal footage 230.4
+                ]
+            , describe "frame count & footage from gauge = Super-8, duration = 576 seconds, speed = 18fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Imperial EighteenFPS SuperEight 576
@@ -327,7 +327,7 @@ all =
                 , test "footage (in feet) is correct" <|
                     \_ -> Expect.equal footage 144
                 ]
-            , describe "frame count, metrage from gauge = Super-8, duration = 78 seconds, speed = 18fps" <|
+            , describe "frame count & metrage from gauge = Super-8, duration = 78 seconds, speed = 18fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Metric EighteenFPS SuperEight 78
@@ -337,7 +337,7 @@ all =
                 , test "footage (in metres) is correct" <|
                     \_ -> Expect.equal footage 5.9436
                 ]
-            , describe "frame count, footage from gauge = 8mm, duration = 176 seconds, speed = 16fps" <|
+            , describe "frame count & footage from gauge = 8mm, duration = 176 seconds, speed = 16fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Imperial SixteenFPS Eight 176
