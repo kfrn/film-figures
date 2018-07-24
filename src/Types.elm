@@ -12,8 +12,12 @@ allSystemsOfMeasurement =
 
 
 type Gauge
-    = ThirtyFive
+    = Seventy
+    | ThirtyFive
+    | ThirtyFiveThreePerf
+    | ThirtyFiveTwoPerf
     | TwentyEight
+    | SeventeenPtFive
     | Sixteen
     | NinePtFive
     | SuperEight
@@ -22,7 +26,7 @@ type Gauge
 
 allGauges : List Gauge
 allGauges =
-    [ ThirtyFive, TwentyEight, Sixteen, NinePtFive, SuperEight, Eight ]
+    [ Seventy, ThirtyFive, ThirtyFiveThreePerf, ThirtyFiveTwoPerf, TwentyEight, SeventeenPtFive, Sixteen, NinePtFive, SuperEight, Eight ]
 
 
 type Control

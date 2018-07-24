@@ -70,11 +70,23 @@ speedInFPS speed =
 framesPerFoot : Gauge -> Float
 framesPerFoot gauge =
     case gauge of
+        Seventy ->
+            12.8
+
         ThirtyFive ->
             16
 
+        ThirtyFiveThreePerf ->
+            24
+
+        ThirtyFiveTwoPerf ->
+            32
+
         TwentyEight ->
             20.5
+
+        SeventeenPtFive ->
+            32
 
         Sixteen ->
             40

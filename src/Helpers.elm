@@ -7,11 +7,23 @@ import Types exposing (..)
 displayNameForGauge : Gauge -> String
 displayNameForGauge gauge =
     case gauge of
+        Seventy ->
+            "65mm/70mm (5-perf)"
+
         ThirtyFive ->
             "35mm"
 
+        ThirtyFiveThreePerf ->
+            "35mm 3-perf"
+
+        ThirtyFiveTwoPerf ->
+            "35mm 2-perf"
+
         TwentyEight ->
             "28mm"
+
+        SeventeenPtFive ->
+            "17.5mm"
 
         Sixteen ->
             "16mm"
