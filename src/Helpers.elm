@@ -7,6 +7,9 @@ import Types exposing (..)
 displayNameForGauge : Gauge -> String
 displayNameForGauge gauge =
     case gauge of
+        Imax ->
+            "Imax"
+
         Seventy ->
             "65mm/70mm (5-perf)"
 

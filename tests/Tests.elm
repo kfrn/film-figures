@@ -11,7 +11,19 @@ all : Test
 all =
     describe "Basic calculations"
         [ describe "calculate duration & framecount from footage" <|
-            [ describe "gauge = 65/70mm, footage = 75', speed = 24fps" <|
+            [ describe "gauge = Imax, footage = 600', speed = 24fps" <|
+                let
+                    ( duration, frameCount ) =
+                        fromFootage Imperial TwentyFourFPS Imax 600
+                in
+                [ test "duration is correct" <|
+                    \_ ->
+                        Expect.equal (Round.round 3 duration) (toString 106.947)
+                , test "framecount is correct" <|
+                    \_ ->
+                        Expect.equal (Round.round 3 frameCount) (toString 2566.737)
+                ]
+            , describe "gauge = 65/70mm, footage = 75', speed = 24fps" <|
                 let
                     ( duration, frameCount ) =
                         fromFootage Imperial TwentyFourFPS Seventy 75
@@ -181,7 +193,17 @@ all =
                 ]
             ]
         , describe "calculate duration & footage from frame count" <|
-            [ describe "duration & footage from gauge = 65/70mm, frame count = 200, speed = 24fps" <|
+            [ describe "duration & footage from gauge = Imax, frame count = 450, speed = 24fps" <|
+                let
+                    ( duration, footage ) =
+                        fromFrameCount Imperial TwentyFourFPS Imax 450
+                in
+                [ test "duration is correct" <|
+                    \_ -> Expect.equal duration 18.75
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal (Round.round 3 footage) (toString 105.192)
+                ]
+            , describe "duration & footage from gauge = 65/70mm, frame count = 200, speed = 24fps" <|
                 let
                     ( duration, footage ) =
                         fromFrameCount Imperial TwentyFourFPS Seventy 200
@@ -323,7 +345,17 @@ all =
                 ]
             ]
         , describe "calculate frame count & footage from duration" <|
-            [ describe "frame count & footage from gauge = 65/70mm, duration = 20 seconds, speed = 24fps" <|
+            [ describe "frame count & footage from gauge = Imax, duration = 42 seconds, speed = 24fps" <|
+                let
+                    ( frameCount, footage ) =
+                        fromDuration Imperial TwentyFourFPS Imax 42
+                in
+                [ test "frame count is correct" <|
+                    \_ -> Expect.equal frameCount 1008
+                , test "footage (in feet) is correct" <|
+                    \_ -> Expect.equal (Round.round 2 footage) (toString 235.63)
+                ]
+            , describe "frame count & footage from gauge = 65/70mm, duration = 20 seconds, speed = 24fps" <|
                 let
                     ( frameCount, footage ) =
                         fromDuration Imperial TwentyFourFPS Seventy 20

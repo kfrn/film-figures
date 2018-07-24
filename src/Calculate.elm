@@ -70,6 +70,9 @@ speedInFPS speed =
 framesPerFoot : Gauge -> Float
 framesPerFoot gauge =
     case gauge of
+        Imax ->
+            304.8 / (4.75 * 15)
+
         Seventy ->
             12.8
 
