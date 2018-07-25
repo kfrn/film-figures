@@ -36,10 +36,6 @@ type Control
     | FrameCountControl
 
 
-type alias ControlInFocus =
-    Control
-
-
 allControls : List Control
 allControls =
     [ FootageControl, DurationControl, FrameCountControl ]

@@ -1,6 +1,6 @@
 module Model exposing (Model, init)
 
-import Calculate
+import Calculate exposing (fromFootage)
 import Translate exposing (Language(..))
 import Types exposing (..)
 
@@ -9,10 +9,9 @@ type alias Model =
     { system : SystemOfMeasurement
     , language : Language
     , gauge : Gauge
-    , controlInFocus : Control
-    , duration : DurationInSeconds
-    , frameCount : FrameCount
-    , footage : Footage
+    , duration : String
+    , frameCount : String
+    , footage : String
     , speed : Speed
     , dropdownMenuOpen : Bool
     }
@@ -26,10 +25,7 @@ init =
 initialModel : Model
 initialModel =
     let
-        feet =
-            180
-
-        sys =
+        system =
             Imperial
 
         speed =
@@ -38,16 +34,18 @@ initialModel =
         gauge =
             Sixteen
 
-        ( dur, frames ) =
-            Calculate.fromFootage sys speed gauge feet
+        footage =
+            20
+
+        ( duration, frames ) =
+            fromFootage system speed gauge footage
     in
-    { system = sys
+    { system = system
     , language = EN
     , gauge = gauge
-    , controlInFocus = FootageControl
-    , duration = dur
-    , frameCount = frames
-    , footage = feet
+    , footage = toString footage
+    , duration = toString duration
+    , frameCount = toString frames
     , speed = speed
     , dropdownMenuOpen = False
     }

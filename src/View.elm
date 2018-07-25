@@ -1,10 +1,11 @@
 module View exposing (view)
 
-import Calculate exposing (feetToMetres)
-import Helpers exposing (displayNameForGauge, displayNameForSpeed, formatDuration, getDisplayValue)
-import Html exposing (Html, b, button, div, em, h1, i, input, label, nav, option, p, select, span, text)
-import Html.Attributes as Attr exposing (attribute, class, classList, id, placeholder, required, selected, step, type_)
-import Html.Events exposing (on, onClick, onInput, onWithOptions)
+-- import Calculate exposing (feetToMetres)
+
+import Helpers exposing (displayNameForGauge, displayNameForSpeed)
+import Html exposing (Html, button, div, em, i, input, nav, option, p, select, span, text)
+import Html.Attributes exposing (attribute, class, classList, id, placeholder, selected, type_, value)
+import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 import Links exposing (LinkName(..), link)
 import List.Extra as ListX
@@ -121,135 +122,56 @@ calculator model =
 makePanel : Model -> Control -> Html Msg
 makePanel model control =
     let
-        inFocus control =
-            model.controlInFocus == control
+        footageLabel =
+            case model.system of
+                Metric ->
+                    "metres"
 
-        panel =
+                Imperial ->
+                    "feet"
+
+        ( message, paramValue, labelText ) =
             case control of
                 FootageControl ->
-                    createFootageControlPanel model control (inFocus control)
+                    ( UpdateFootage, model.footage, footageLabel )
 
                 DurationControl ->
-                    createDurationControlPanel model control (inFocus control)
+                    ( UpdateDuration, model.duration, "seconds" )
 
                 FrameCountControl ->
-                    createFrameCountControlPanel model control (inFocus control)
+                    ( UpdateFrameCount, model.frameCount, "frames" )
+
+        valid =
+            (Result.toMaybe <| String.toFloat paramValue) == Nothing
     in
     div
         [ classList
             [ ( "column", True )
             , ( "control-panel", True )
-            , ( "control-focused", control == model.controlInFocus )
-            , ( "control-unfocused", control /= model.controlInFocus )
-            ]
-        , onClick <| ChangeControlInFocus control
-        ]
-        [ panel ]
-
-
-createFootageControlPanel : Model -> Control -> Bool -> Html Msg
-createFootageControlPanel model currentControl inFocus =
-    let
-        footageVal =
-            getDisplayValue model.footage 2
-
-        nameStr =
-            case model.system of
-                Metric ->
-                    MetresStr
-
-                Imperial ->
-                    FeetStr
-
-        labelText =
-            translate model.language nameStr
-    in
-    if inFocus then
-        makeInputSection currentControl footageVal UpdateFootage labelText
-    else
-        makeInfoSection footageVal labelText
-
-
-createDurationControlPanel : Model -> Control -> Bool -> Html Msg
-createDurationControlPanel model currentControl inFocus =
-    let
-        duration =
-            getDisplayValue model.duration 2
-
-        labelText =
-            "@" ++ displayNameForSpeed model.speed
-    in
-    if inFocus then
-        makeInputSection currentControl duration UpdateDuration labelText
-    else
-        makeInfoSection (formatDuration model.duration) labelText
-
-
-createFrameCountControlPanel : Model -> Control -> Bool -> Html Msg
-createFrameCountControlPanel model currentControl inFocus =
-    let
-        frameCount =
-            getDisplayValue model.frameCount 1
-
-        labelText =
-            translate model.language FramesStr
-    in
-    if inFocus then
-        makeInputSection currentControl frameCount UpdateFrameCount labelText
-    else
-        makeInfoSection frameCount labelText
-
-
-makeInputSection : Control -> String -> (String -> Msg) -> String -> Html Msg
-makeInputSection control paramValue message labelText =
-    let
-        ( inputType, stepVal ) =
-            case control of
-                DurationControl ->
-                    ( "time", "1" )
-
-                _ ->
-                    ( "number", "0.01" )
-    in
-    div [ class "field is-horizontal" ]
-        [ div [ class "field-body" ]
-            [ input
-                [ classList [ ( "input", True ), ( "is-primary", True ) ]
-                , placeholder paramValue
-                , type_ inputType
-                , step stepVal
-                , required True
-                , onInput message
-                ]
-                []
-            ]
-        , div [ class "field-label is-normal" ]
-            [ label [ classList [ ( "label", True ) ] ] [ text labelText ]
             ]
         ]
-
-
-makeInfoSection : String -> String -> Html Msg
-makeInfoSection paramValue labelText =
-    div [ class "field is-horizontal" ]
         [ div
-            [ class "field-label is-normal" ]
-            [ b [ stopPropagation "click" ] [ text paramValue ] ]
-        , div [ class "field-label is-normal" ]
-            [ label [] [ text labelText ]
+            [ class "field is-horizontal" ]
+            [ div
+                [ class "field-body" ]
+                [ input
+                    [ classList
+                        [ ( "input", True )
+                        , ( "is-primary", True )
+                        , ( "is-danger", valid )
+                        ]
+                    , placeholder labelText
+                    , type_ "text"
+                    , value paramValue
+                    , onInput message
+                    ]
+                    []
+                ]
+            , div
+                [ class "field-label is-normal" ]
+                [ text labelText ]
             ]
         ]
-
-
-stopPropagation : String -> Html.Attribute Msg
-stopPropagation action =
-    let
-        options =
-            { stopPropagation = True
-            , preventDefault = False
-            }
-    in
-    onWithOptions action options (Json.succeed Update.NoOp)
 
 
 renderSelect : a -> (a -> Update.Msg) -> (a -> String) -> List a -> Html Update.Msg

@@ -141,8 +141,10 @@ div.app-footer {
 
 .control-panel {
   border-radius: 5px;
+  color: black;
   margin: 1em auto;
   max-width: 50%;
+  border: 1px solid lightgrey;
 }
 
 .field-label {
@@ -204,27 +206,4 @@ div.app-footer {
   .columns {
     margin: 1em auto 1.5em auto;
   }
-}
-
-.control-focused {
-  background-color: #00d1b2;
-}
-
-.control-unfocused {
-  border: 1px solid lightgrey;
-}
-
-/*------- Hide HTML5 number input stepper -------*/
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button,
-input[type="time"]::-webkit-outer-spin-button,
-input[type="time"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"],
-input[type="time"] {
-  -moz-appearance: textfield;
 }

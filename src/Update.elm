@@ -1,6 +1,7 @@
 module Update exposing (Msg(..), update)
 
 import Calculate
+import Helpers exposing (conditionallyRound)
 import Model exposing (Model)
 import Translate exposing (Language(..))
 import Types exposing (..)
@@ -10,7 +11,6 @@ type Msg
     = ChangeLanguage Language
     | ChangeSystemOfMeasurement SystemOfMeasurement
     | ChangeGauge Gauge
-    | ChangeControlInFocus Control
     | ChangeSpeed Speed
     | UpdateFootage String
     | UpdateDuration String
@@ -26,142 +26,62 @@ update msg model =
             ( { model | language = l }, Cmd.none )
 
         ChangeSystemOfMeasurement sys ->
-            if sys == model.system then
-                ( model, Cmd.none )
-            else
-                case model.controlInFocus of
-                    FootageControl ->
-                        let
-                            ( dur, fc ) =
-                                Calculate.fromFootage sys model.speed model.gauge model.footage
-
-                            newModel =
-                                { model | system = sys, duration = dur, frameCount = fc }
-                        in
-                        ( newModel, Cmd.none )
-
-                    DurationControl ->
-                        let
-                            ( fc, len ) =
-                                Calculate.fromDuration sys model.speed model.gauge model.duration
-
-                            newModel =
-                                { model | system = sys, frameCount = fc, footage = len }
-                        in
-                        ( newModel, Cmd.none )
-
-                    FrameCountControl ->
-                        let
-                            ( dur, len ) =
-                                Calculate.fromFrameCount sys model.speed model.gauge model.frameCount
-
-                            newModel =
-                                { model | system = sys, duration = dur, footage = len }
-                        in
-                        ( newModel, Cmd.none )
+            let
+                newModel =
+                    calculateFromFrameCount model model.frameCount sys
+            in
+            ( { newModel | system = sys }, Cmd.none )
 
         ChangeGauge filmGauge ->
-            case model.controlInFocus of
-                FootageControl ->
-                    let
-                        ( dur, fc ) =
-                            Calculate.fromFootage model.system model.speed filmGauge model.footage
-
-                        newModel =
-                            { model | gauge = filmGauge, duration = dur, frameCount = fc }
-                    in
-                    ( newModel, Cmd.none )
-
-                DurationControl ->
-                    let
-                        ( fc, len ) =
-                            Calculate.fromDuration model.system model.speed filmGauge model.duration
-
-                        newModel =
-                            { model | gauge = filmGauge, frameCount = fc, footage = len }
-                    in
-                    ( newModel, Cmd.none )
-
-                FrameCountControl ->
-                    let
-                        ( dur, len ) =
-                            Calculate.fromFrameCount model.system model.speed filmGauge model.frameCount
-
-                        newModel =
-                            { model | gauge = filmGauge, duration = dur, footage = len }
-                    in
-                    ( newModel, Cmd.none )
-
-        ChangeControlInFocus control ->
-            ( { model | controlInFocus = control }, Cmd.none )
+            let
+                newModel =
+                    calculateFromFootage model model.footage filmGauge model.system model.speed
+            in
+            ( { newModel | gauge = filmGauge }, Cmd.none )
 
         ChangeSpeed speed ->
             let
-                ( dur, fc ) =
-                    Calculate.fromFootage model.system speed model.gauge model.footage
-
                 newModel =
-                    { model | duration = dur, frameCount = fc, speed = speed }
+                    calculateFromFootage model model.footage model.gauge model.system speed
+            in
+            ( { newModel | speed = speed }, Cmd.none )
+
+        UpdateFootage footage ->
+            let
+                newModel =
+                    calculateFromFootage model footage model.gauge model.system model.speed
             in
             ( newModel, Cmd.none )
 
-        UpdateFootage footage ->
-            case String.toFloat footage of
-                Ok ft ->
-                    let
-                        footage =
-                            abs ft
-
-                        ( dur, fc ) =
-                            Calculate.fromFootage model.system model.speed model.gauge footage
-
-                        newModel =
-                            { model | duration = dur, frameCount = fc, footage = footage }
-                    in
-                    ( newModel, Cmd.none )
-
-                Err e ->
-                    ( model, Cmd.none )
-
         UpdateDuration duration ->
-            let
-                numStrings =
-                    String.split ":" duration
-            in
-            if List.length numStrings == 3 then
-                case List.map String.toInt numStrings of
-                    [ Ok hrs, Ok mins, Ok secs ] ->
-                        let
-                            totalSeconds =
-                                toFloat <| secs + (mins * 60) + (hrs * 3600)
-
-                            ( fc, len ) =
-                                Calculate.fromDuration model.system model.speed model.gauge totalSeconds
-
-                            newModel =
-                                { model | duration = totalSeconds, frameCount = fc, footage = len }
-                        in
-                        ( newModel, Cmd.none )
-
-                    _ ->
-                        ( model, Cmd.none )
-            else
-                ( model, Cmd.none )
-
-        UpdateFrameCount framecount ->
-            case String.toFloat framecount of
-                Ok fc ->
+            case String.toFloat duration of
+                Ok dur ->
                     let
-                        ( dur, len ) =
-                            Calculate.fromFrameCount model.system model.speed model.gauge (abs fc)
+                        ( fc, len ) =
+                            Calculate.fromDuration model.system model.speed model.gauge dur
 
                         newModel =
-                            { model | duration = dur, frameCount = abs fc, footage = len }
+                            { model
+                                | duration = duration
+                                , frameCount = conditionallyRound fc
+                                , footage = conditionallyRound len
+                            }
                     in
                     ( newModel, Cmd.none )
 
-                Err e ->
-                    ( model, Cmd.none )
+                Err _ ->
+                    let
+                        newModel =
+                            clearFilmValues model
+                    in
+                    ( { newModel | duration = duration }, Cmd.none )
+
+        UpdateFrameCount frameCount ->
+            let
+                newModel =
+                    calculateFromFrameCount model frameCount model.system
+            in
+            ( newModel, Cmd.none )
 
         ToggleMenu ->
             let
@@ -172,3 +92,59 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+clearFilmValues : Model -> Model
+clearFilmValues model =
+    { model
+        | frameCount = ""
+        , duration = ""
+        , footage = ""
+    }
+
+
+calculateFromFootage : Model -> String -> Gauge -> SystemOfMeasurement -> Speed -> Model
+calculateFromFootage model footage gauge system speed =
+    case String.toFloat footage of
+        Ok ft ->
+            let
+                filmLength =
+                    abs ft
+
+                ( dur, fc ) =
+                    Calculate.fromFootage system speed gauge filmLength
+            in
+            { model
+                | duration = conditionallyRound dur
+                , frameCount = conditionallyRound fc
+                , footage = footage
+            }
+
+        Err _ ->
+            let
+                newModel =
+                    clearFilmValues model
+            in
+            { newModel | footage = footage }
+
+
+calculateFromFrameCount : Model -> String -> SystemOfMeasurement -> Model
+calculateFromFrameCount model frameCount system =
+    case String.toFloat frameCount of
+        Ok fc ->
+            let
+                ( dur, len ) =
+                    Calculate.fromFrameCount system model.speed model.gauge (abs fc)
+            in
+            { model
+                | duration = conditionallyRound dur
+                , frameCount = frameCount
+                , footage = conditionallyRound len
+            }
+
+        Err _ ->
+            let
+                newModel =
+                    clearFilmValues model
+            in
+            { newModel | frameCount = frameCount }

@@ -1,6 +1,6 @@
 module Links exposing (..)
 
-import Html exposing (Html, a, i, span, text)
+import Html exposing (Html, a, i, span)
 import Html.Attributes exposing (class, href)
 
 

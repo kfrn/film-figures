@@ -79,9 +79,9 @@ translate language appString =
                     }
 
                 SetOptionStr ->
-                    { en = "Set one of the following (click to focus):"
-                    , fr = "Définissez une option (cliquez pour sélectionner):"
-                    , it = "Imposta un'opzione (clicca per selezionare)"
+                    { en = "Set one of the following:"
+                    , fr = "Définissez une option:"
+                    , it = "Imposta un'opzione:"
                     }
 
                 TaglineStr ->
