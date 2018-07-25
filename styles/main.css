@@ -143,7 +143,7 @@ div.app-footer {
   border-radius: 5px;
   color: black;
   margin: 1em auto;
-  max-width: 50%;
+  max-width: 150px;
   border: 1px solid lightgrey;
 }
 
@@ -165,20 +165,17 @@ div.app-footer {
   }
 
   #other-controls {
-    max-width: 70%;
+    max-width: 85%;
     margin: 0 auto;
   }
 
   .control-panel {
+    margin: 1em 0.5em 1em 0.5em;
     max-width: 40%;
   }
 }
 
 @media (min-width: 1024px) {
-  .control-panel {
-    margin: 1em 0.5em;
-  }
-
   .control-panel .field {
     display: flex;
     justify-content: space-around;

@@ -35,7 +35,7 @@ initialModel =
             Sixteen
 
         footage =
-            20
+            24
 
         ( duration, frames ) =
             fromFootage system speed gauge footage
